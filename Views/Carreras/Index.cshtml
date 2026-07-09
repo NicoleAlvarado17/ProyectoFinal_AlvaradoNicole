@@ -1,0 +1,27 @@
+@model IEnumerable<SistemaMatriculaURA.Models.Carrera>
+
+@{
+    ViewData["Title"] = "Carreras";
+}
+
+<h1>Carreras</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Código</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model ?? Enumerable.Empty<SistemaMatriculaURA.Models.Carrera>())
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Nombre</td>
+            <td>@item.Codigo</td>
+        </tr>
+    }
+    </tbody>
+</table>

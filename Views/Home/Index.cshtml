@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="row mt-5">
+    <div class="col-md-7">
+        <h1 class="display-4 fw-bold" style="color: var(--ura-blue);">
+            Universidad Real Americana
+        </h1>
+
+        <p class="lead mt-3">
+            Sistema académico moderno para gestionar programas, cursos, docentes y matrícula estudiantil.
+        </p>
+
+        <p class="mt-4">
+            <a class="btn btn-primary btn-lg me-2" asp-area="Identity" asp-page="/Account/Register">
+                Crear Cuenta de Estudiante
+            </a>
+            <a class="btn btn-outline-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">
+                Iniciar Sesión
+            </a>
+        </p>
+
+        <hr class="mt-4" />
+
+        <h3 class="mt-3" style="color: var(--ura-blue);">Explorar catálogo académico</h3>
+        <ul class="list-unstyled mt-2">
+            <li><a asp-controller="Carreras" asp-action="Index">Ver Programas Académicos</a></li>
+            <li><a asp-controller="Cursos" asp-action="Index">Ver Cursos Disponibles</a></li>
+        </ul>
+    </div>
+
+    <div class="col-md-5 text-center">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="card-title" style="color: var(--ura-blue);">Portal del Registrador</h4>
+                <p class="card-text">
+                    Los administradores pueden gestionar programas y cursos, mientras los estudiantes se registran y consultan opciones.
+                </p>
+                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">
+                    Ir a Programas
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
