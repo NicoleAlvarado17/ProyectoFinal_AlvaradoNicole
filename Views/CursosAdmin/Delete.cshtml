@@ -1,0 +1,16 @@
+@model SistemaMatriculaURA.Models.Curso
+
+<div class="container mt-4">
+    <h1>Eliminar Curso</h1>
+
+    <div class="ura-box p-4" style="max-width: 600px;">
+        <p>¿Está seguro que desea eliminar el curso <strong>@Model.Nombre</strong>?</p>
+
+      <form asp-action="Delete" asp-controller="CursosAdmin" method="post">
+
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

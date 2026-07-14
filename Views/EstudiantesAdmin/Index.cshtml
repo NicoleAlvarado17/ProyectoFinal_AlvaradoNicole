@@ -7,7 +7,7 @@
 <div class="container mt-4">
     <h1 class="mb-3">Gestión de Estudiantes</h1>
 
-    <a asp-action="Create" class="btn btn-primary mb-3">+ Registrar Estudiante</a>
+    <a asp-controller="EstudiantesAdmin" asp-action="Create" class="btn btn-primary mb-3">+ Registrar Estudiante</a>
 
     @if (TempData["Success"] != null)
     {
@@ -31,10 +31,13 @@
                         <td>@e.Nombre</td>
                         <td>@e.Correo</td>
                         <td>@e.Carrera?.Nombre</td>
+
                         <td class="text-end">
-                            <a asp-action="Details" asp-route-id="@e.Id" class="btn btn-sm btn-info">Detalles</a>
-                            <a asp-action="Edit" asp-route-id="@e.Id" class="btn btn-sm btn-warning">Editar</a>
-                            <a asp-action="Delete" asp-route-id="@e.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                            <a asp-controller="EstudiantesAdmin" asp-action="Edit" asp-route-id="@e.Id" class="btn btn-warning btn-sm">Editar</a>
+
+                            <a asp-controller="EstudiantesAdmin" asp-action="Details" asp-route-id="@e.Id" class="btn btn-info btn-sm">Detalles</a>
+
+                            <a asp-controller="EstudiantesAdmin" asp-action="Delete" asp-route-id="@e.Id" class="btn btn-danger btn-sm">Eliminar</a>
                         </td>
                     </tr>
                 }

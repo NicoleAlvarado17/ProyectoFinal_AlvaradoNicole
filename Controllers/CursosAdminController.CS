@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,11 +8,11 @@ using SistemaMatriculaURA.Models;
 namespace ProyectoFinal_AlvaradoNicole.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class CursosController : Controller
+    public class CursosAdminController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CursosController(ApplicationDbContext context)
+        public CursosAdminController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -20,27 +21,16 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         {
             var cursos = await _context.Cursos
                 .Include(c => c.Carrera)
+                .Include(c => c.Docente)
                 .ToListAsync();
 
             return View(cursos);
         }
 
-        public async Task<IActionResult> Details(int id)
-        {
-            var curso = await _context.Cursos
-                .Include(c => c.Carrera)
-                .FirstOrDefaultAsync(c => c.Id == id);
-
-            if (curso == null)
-                return NotFound();
-
-            return View(curso);
-        }
-
         public IActionResult Create()
         {
             ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre");
-            ViewBag.DocenteId = new SelectList(_context.Docentes, "Nombre", "Nombre");
+            ViewBag.DocenteId = new SelectList(_context.Docentes, "Id", "Nombre");
             return View();
         }
 
@@ -48,27 +38,28 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Curso curso)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Cursos.Add(curso);
-                await _context.SaveChangesAsync();
-                TempData["Success"] = "Curso creado correctamente.";
-                return RedirectToAction(nameof(Index));
+                ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre");
+                ViewBag.DocenteId = new SelectList(_context.Docentes, "Id", "Nombre");
+                return View(curso);
             }
 
-            ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre");
-            ViewBag.DocenteId = new SelectList(_context.Docentes, "Nombre", "Nombre");
-            return View(curso);
+            _context.Cursos.Add(curso);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Curso creado correctamente.";
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int id)
         {
             var curso = await _context.Cursos.FindAsync(id);
-            if (curso == null)
-                return NotFound();
+            if (curso == null) return NotFound();
 
             ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre", curso.CarreraId);
-            ViewBag.DocenteId = new SelectList(_context.Docentes, "Nombre", "Nombre", curso.Docente);
+            ViewBag.DocenteId = new SelectList(_context.Docentes, "Id", "Nombre", curso.DocenteId);
+
             return View(curso);
         }
 
@@ -76,30 +67,30 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Curso curso)
         {
-            if (id != curso.Id)
-                return NotFound();
+            if (id != curso.Id) return NotFound();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Update(curso);
-                await _context.SaveChangesAsync();
-                TempData["Success"] = "Curso actualizado.";
-                return RedirectToAction(nameof(Index));
+                ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre", curso.CarreraId);
+                ViewBag.DocenteId = new SelectList(_context.Docentes, "Id", "Nombre", curso.DocenteId);
+                return View(curso);
             }
 
-            ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre", curso.CarreraId);
-            ViewBag.ProfesorId = new SelectList(_context.Docentes, "Nombre", "Nombre", curso.Docente);
-            return View(curso);
+            _context.Update(curso);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Curso actualizado correctamente.";
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(int id)
         {
             var curso = await _context.Cursos
                 .Include(c => c.Carrera)
+                .Include(c => c.Docente)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (curso == null)
-                return NotFound();
+            if (curso == null) return NotFound();
 
             return View(curso);
         }

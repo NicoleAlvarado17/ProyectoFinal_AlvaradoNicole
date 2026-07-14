@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SistemaMatriculaURA.Models;
 
@@ -26,7 +27,7 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Carreras = _context.Carreras.ToList();
+            ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre");
             return View();
         }
 
@@ -36,12 +37,13 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Carreras = _context.Carreras.ToList();
+                ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre");
                 return View(estudiante);
             }
 
             _context.Estudiantes.Add(estudiante);
             await _context.SaveChangesAsync();
+
             TempData["Success"] = "Estudiante registrado correctamente.";
             return RedirectToAction(nameof(Index));
         }
@@ -49,10 +51,9 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var estudiante = await _context.Estudiantes.FindAsync(id);
-            if (estudiante == null)
-                return NotFound();
+            if (estudiante == null) return NotFound();
 
-            ViewBag.Carreras = _context.Carreras.ToList();
+            ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre", estudiante.CarreraId);
             return View(estudiante);
         }
 
@@ -60,57 +61,53 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Estudiante estudiante)
         {
-            if (id != estudiante.Id)
-                return NotFound();
+            if (id != estudiante.Id) return NotFound();
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Carreras = _context.Carreras.ToList();
+                ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre", estudiante.CarreraId);
                 return View(estudiante);
             }
 
             _context.Update(estudiante);
             await _context.SaveChangesAsync();
+
             TempData["Success"] = "Estudiante actualizado.";
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: EstudiantesAdmin/Details/5
         public async Task<IActionResult> Details(int id)
         {
             var estudiante = await _context.Estudiantes
                 .Include(e => e.Carrera)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
-            if (estudiante == null)
-                return NotFound();
+            if (estudiante == null) return NotFound();
 
             return View(estudiante);
         }
 
-        // GET: EstudiantesAdmin/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var estudiante = await _context.Estudiantes
                 .Include(e => e.Carrera)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
-            if (estudiante == null)
-                return NotFound();
+            if (estudiante == null) return NotFound();
 
             return View(estudiante);
         }
 
-        // POST: EstudiantesAdmin/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var estudiante = await _context.Estudiantes.FindAsync(id);
+
             if (estudiante != null)
             {
-                // Comprobar relaciones (matriculas)
                 var tieneMatriculas = await _context.Matriculas.AnyAsync(m => m.EstudianteId == estudiante.Id);
+
                 if (tieneMatriculas)
                 {
                     TempData["Error"] = "No se puede eliminar el estudiante porque tiene matrículas asociadas.";
@@ -119,6 +116,7 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
                 _context.Estudiantes.Remove(estudiante);
                 await _context.SaveChangesAsync();
+
                 TempData["Success"] = "Estudiante eliminado.";
             }
 

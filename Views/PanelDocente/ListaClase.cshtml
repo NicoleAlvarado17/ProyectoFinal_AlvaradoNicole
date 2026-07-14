@@ -1,0 +1,22 @@
+@model IEnumerable<SistemaMatriculaURA.Models.Matricula>
+
+<h2>Lista de Clase – @ViewBag.Curso.Nombre</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Estudiante</th>
+            <th>Correo</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var m in Model)
+        {
+            <tr>
+                <td>@m.Estudiante.Nombre</td>
+                <td>@m.Estudiante.Correo</td>
+            </tr>
+        }
+    </tbody>
+</table>
