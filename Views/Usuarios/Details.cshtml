@@ -1,0 +1,15 @@
+@model SistemaMatriculaURA.Models.Estudiante
+
+@{
+    ViewData["Title"] = "Detalles del Estudiante";
+}
+
+<div class="ura-box p-4">
+    <h2 class="mb-3">Detalles del Estudiante</h2>
+
+    <p><strong>Nombre:</strong> @Model.Nombre</p>
+    <p><strong>Correo:</strong> @Model.Correo</p>
+    <p><strong>Carrera:</strong> @Model.Carrera?.Nombre</p>
+
+    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+</div>

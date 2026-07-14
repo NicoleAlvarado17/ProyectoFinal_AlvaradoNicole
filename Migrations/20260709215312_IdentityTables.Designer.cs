@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SistemaMatriculaURA.Models;
 
@@ -11,9 +12,11 @@ using SistemaMatriculaURA.Models;
 namespace ProyectoFinal_AlvaradoNicole.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260709215312_IdentityTables")]
+    partial class IdentityTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -285,23 +288,7 @@ namespace ProyectoFinal_AlvaradoNicole.Migrations
                     b.Property<int>("Creditos")
                         .HasColumnType("int");
 
-                    b.Property<string>("Horario")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Modalidad")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Profesor")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sede")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -318,11 +305,7 @@ namespace ProyectoFinal_AlvaradoNicole.Migrations
                             CarreraId = 1,
                             Codigo = "SC-301",
                             Creditos = 4,
-                            Horario = "",
-                            Modalidad = "",
-                            Nombre = "Estructuras de Datos",
-                            Profesor = "",
-                            Sede = ""
+                            Nombre = "Estructuras de Datos"
                         },
                         new
                         {
@@ -330,11 +313,7 @@ namespace ProyectoFinal_AlvaradoNicole.Migrations
                             CarreraId = 1,
                             Codigo = "SC-220",
                             Creditos = 3,
-                            Horario = "",
-                            Modalidad = "",
-                            Nombre = "Bases de Datos II",
-                            Profesor = "",
-                            Sede = ""
+                            Nombre = "Bases de Datos II"
                         },
                         new
                         {
@@ -342,11 +321,7 @@ namespace ProyectoFinal_AlvaradoNicole.Migrations
                             CarreraId = 2,
                             Codigo = "ADM-101",
                             Creditos = 3,
-                            Horario = "",
-                            Modalidad = "",
-                            Nombre = "Introducción a la Administración",
-                            Profesor = "",
-                            Sede = ""
+                            Nombre = "Introducción a la Administración"
                         });
                 });
 
@@ -392,9 +367,6 @@ namespace ProyectoFinal_AlvaradoNicole.Migrations
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

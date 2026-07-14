@@ -1,0 +1,76 @@
+@model SistemaMatriculaURA.Models.Curso
+
+@{
+    ViewData["Title"] = "Editar Curso";
+}
+
+<div class="container mt-4">
+    <h1>Editar Curso</h1>
+
+    <div class="ura-box p-4">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label>Código</label>
+                <input asp-for="Codigo" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label>Nombre</label>
+                <input asp-for="Nombre" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label>Créditos</label>
+                <input asp-for="Creditos" class="form-control" type="number" />
+            </div>
+
+            <div class="mb-3">
+                <label>Carrera</label>
+                <select asp-for="CarreraId" class="form-select">
+                    @foreach (var c in ViewBag.Carreras)
+                    {
+                        <option value="@c.Id">@c.Nombre</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label>Modalidad</label>
+                <select asp-for="Modalidad" class="form-select">
+                    <option>Virtual</option>
+                    <option>Presencial</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label>Sede</label>
+                <select asp-for="Sede" class="form-select">
+                    <option>San José</option>
+                    <option>Heredia</option>
+                    <option>Cartago</option>
+                    <option>Alajuela</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label>Horario</label>
+                <input asp-for="Horario" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label>Profesor</label>
+                <select asp-for="Profesor" class="form-select">
+                    @foreach (var d in ViewBag.Docentes)
+                    {
+                        <option value="@d.Nombre">@d.Nombre</option>
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-success">Guardar Cambios</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

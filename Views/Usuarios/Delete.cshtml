@@ -1,0 +1,17 @@
+@model SistemaMatriculaURA.Models.Estudiante
+
+@{
+    ViewData["Title"] = "Eliminar Estudiante";
+}
+
+<div class="ura-box p-4">
+    <h2 class="mb-3 text-danger">Eliminar Estudiante</h2>
+
+    <p>¿Seguro que deseas eliminar a <strong>@Model.Nombre</strong>?</p>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

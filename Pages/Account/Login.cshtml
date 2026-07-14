@@ -1,0 +1,39 @@
+@page
+@model ProyectoFinal_AlvaradoNicole.Pages.Account.LoginModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<div class="ura-box mt-5">
+    <img src="~/img/logo-ura.png" class="ura-logo" />
+
+    <h2 class="ura-title">Iniciar Sesión</h2>
+    <p class="text-center">Universidad Real Americana</p>
+
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="mb-3">
+            <label>Correo electrónico</label>
+            <input asp-for="Input.Email" class="form-control" placeholder="usuario@ura.edu" />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Contraseña</label>
+            <input asp-for="Input.Password" class="form-control" type="password" />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Ingresar</button>
+
+        <div class="text-center mt-3">
+            <a asp-page="./ForgotPassword" class="ura-link">¿Olvidó Contraseña?</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+}

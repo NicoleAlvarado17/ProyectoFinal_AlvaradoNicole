@@ -5,7 +5,7 @@
 namespace ProyectoFinal_AlvaradoNicole.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedData2 : Migration
+    public partial class AddUserIdToEstudiante : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

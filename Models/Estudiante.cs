@@ -7,6 +7,7 @@
         public string Correo { get; set; }
         public int CarreraId { get; set; }
         public Carrera Carrera { get; set; }
+        public string? UserId { get; set; }
         public System.Collections.Generic.ICollection<Matricula> Matriculas { get; set; }
     }
 }

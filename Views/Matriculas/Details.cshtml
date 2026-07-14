@@ -1,0 +1,29 @@
+@model SistemaMatriculaURA.Models.Matricula
+
+@{
+    ViewData["Title"] = "Detalles de Matrícula";
+}
+
+<div class="container mt-4">
+    <h1>Detalles de Matrícula</h1>
+
+    <div class="ura-box p-4">
+
+        <p><strong>Estudiante:</strong> @Model.Estudiante.Nombre</p>
+        <p><strong>Correo:</strong> @Model.Estudiante.Correo</p>
+
+        <hr />
+
+        <p><strong>Curso:</strong> @Model.Curso.Nombre</p>
+        <p><strong>Código:</strong> @Model.Curso.Codigo</p>
+        <p><strong>Carrera:</strong> @Model.Curso.Carrera.Nombre</p>
+        <p><strong>Créditos:</strong> @Model.Curso.Creditos</p>
+
+        <hr />
+
+        <p><strong>Estado:</strong> @Model.Estado</p>
+        <p><strong>Fecha de matrícula:</strong> @Model.Fecha.ToString("dd/MM/yyyy")</p>
+
+        <a asp-action="Auditoria" class="btn btn-secondary">Volver</a>
+    </div>
+</div>

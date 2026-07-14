@@ -1,50 +1,222 @@
+/* ============================
+   Bootstrap base adjustments
+   ============================ */
+
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #f5f5f5;
 }
 
-/* University look */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+/* ============================
+   URA Colors
+   ============================ */
+
 :root {
-  --ura-blue: #002b5c;
-  --ura-gold: #c9a635;
+    --ura-blue: #002b5c;
+    --ura-blue-dark: #003366;
+    --ura-gold: #c9a635;
 }
 
-body {
-  background-color: #f5f5f5;
-}
-
-.navbar {
-  background-color: var(--ura-blue) !important;
-}
+/* ============================
+   Global Typography
+   ============================ */
 
 h1, h2, h3 {
-  color: var(--ura-blue);
+    color: var(--ura-blue);
 }
 
+/* ============================
+   Buttons
+   ============================ */
+
 .btn-primary {
-  background-color: var(--ura-gold);
-  border-color: var(--ura-gold);
+    background-color: var(--ura-gold);
+    border-color: var(--ura-gold);
+    color: #000;
+    font-weight: 700;
 }
 
 .btn-danger {
-  background-color: var(--ura-blue);
-  border-color: var(--ura-blue);
+    background-color: var(--ura-blue);
+    border-color: var(--ura-blue);
 }
+
+.btn-warning {
+    background-color: var(--ura-gold);
+    border-color: var(--ura-gold);
+    color: #000;
+    font-weight: 700;
+}
+
+/* ============================
+   Navbar & Footer
+   ============================ */
+
+.navbar {
+    background-color: var(--ura-blue) !important;
+}
+
+.ura-header {
+    background-color: var(--ura-blue-dark);
+    border-bottom: 5px solid var(--ura-gold);
+}
+
+.ura-footer {
+    background-color: var(--ura-blue-dark);
+    color: white;
+    border-top: 5px solid var(--ura-gold);
+}
+
+/* ============================
+   Home Page Hero Section
+   ============================ */
+
+.hero-section {
+    background: linear-gradient(135deg, #002b5c, #004b8c);
+    color: white;
+    padding: 60px 40px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.hero-subtitle {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #ffffff;
+}
+
+.hero-buttons .btn {
+    margin-top: 20px;
+}
+
+.hero-buttons .btn-primary,
+.hero-buttons .btn-warning {
+    background-color: var(--ura-gold);
+    border-color: var(--ura-gold);
+    color: #000;
+    font-weight: 700;
+}
+
+.promo-box {
+    background: var(--ura-gold);
+    color: var(--ura-blue);
+    padding: 25px;
+    border-radius: 12px;
+    width: 300px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* ============================
+   Cards & Sections
+   ============================ */
+
+.section-title {
+    color: var(--ura-blue);
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.carrera-card {
+    border-left: 5px solid var(--ura-gold);
+}
+
+.contact-section {
+    background: #f7f7f7;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+.footer {
+    padding: 20px;
+    background: var(--ura-blue);
+    color: white;
+    border-radius: 12px;
+}
+
+/* ============================
+   URA Institutional Forms
+   ============================ */
+
+.ura-box {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    border-top: 6px solid var(--ura-gold);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    width: 520px;
+    margin: auto;
+}
+
+.ura-logo {
+    max-width: 120px !important;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px auto;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.ura-title {
+    text-align: center;
+    font-weight: bold;
+    color: var(--ura-blue-dark);
+    margin-bottom: 10px;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.btn-ura {
+    background-color: var(--ura-blue-dark);
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 10px;
+    width: 100%;
+}
+
+    .btn-ura:hover {
+        background-color: #002244;
+    }
+
+.ura-link {
+    color: var(--ura-gold);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+    .ura-link:hover {
+        text-decoration: underline;
+    }

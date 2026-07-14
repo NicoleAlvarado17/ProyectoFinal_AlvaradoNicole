@@ -1,46 +1,99 @@
 ﻿@{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Página de Inicio";
 }
 
-<div class="row mt-5">
-    <div class="col-md-7">
-        <h1 class="display-4 fw-bold" style="color: var(--ura-blue);">
-            Universidad Real Americana
-        </h1>
-
-        <p class="lead mt-3">
-            Sistema académico moderno para gestionar programas, cursos, docentes y matrícula estudiantil.
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">Tu futuro empieza aquí</h1>
+        <p class="hero-subtitle">
+            Más de 18 carreras acreditadas · 4 sedes · Modalidad presencial y virtual
         </p>
 
-        <p class="mt-4">
-            <a class="btn btn-primary btn-lg me-2" asp-area="Identity" asp-page="/Account/Register">
-                Crear Cuenta de Estudiante
-            </a>
-            <a class="btn btn-outline-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">
-                Iniciar Sesión
-            </a>
-        </p>
-
-        <hr class="mt-4" />
-
-        <h3 class="mt-3" style="color: var(--ura-blue);">Explorar catálogo académico</h3>
-        <ul class="list-unstyled mt-2">
-            <li><a asp-controller="Carreras" asp-action="Index">Ver Programas Académicos</a></li>
-            <li><a asp-controller="Cursos" asp-action="Index">Ver Cursos Disponibles</a></li>
-        </ul>
+        <div class="hero-buttons">
+            <!-- BOTONES CORREGIDOS -->
+            <a asp-page="/Account/Login" class="btn btn-primary btn-lg me-3">Ingresar</a>
+            <a asp-page="/Account/Register" class="btn btn-warning btn-lg">Registrarse</a>
+        </div>
     </div>
 
-    <div class="col-md-5 text-center">
-        <div class="card shadow-sm">
+    <div class="promo-box">
+        <h3 class="promo-title">15% de descuento</h3>
+        <p class="promo-text">
+            Para estudiantes que se matriculen antes del <strong>30 de junio</strong>.
+            Aplica para nuevos ingresos en todos los programas.
+        </p>
+    </div>
+</div>
+
+<hr class="section-divider" />
+
+<h2 class="section-title">Carreras Destacadas</h2>
+
+<div class="row mt-4">
+    <div class="col-md-4 mb-3">
+        <div class="card carrera-card shadow-sm">
             <div class="card-body">
-                <h4 class="card-title" style="color: var(--ura-blue);">Portal del Registrador</h4>
-                <p class="card-text">
-                    Los administradores pueden gestionar programas y cursos, mientras los estudiantes se registran y consultan opciones.
-                </p>
-                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">
-                    Ir a Programas
-                </a>
+                <h5 class="card-title">Ingeniería en Sistemas (IS)</h5>
+                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">Ver más</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card carrera-card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Administración (AD)</h5>
+                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">Ver más</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card carrera-card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Enfermería (EN)</h5>
+                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">Ver más</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card carrera-card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Derecho (DE)</h5>
+                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">Ver más</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card carrera-card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Educación (ED)</h5>
+                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">Ver más</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card carrera-card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Contabilidad (CO)</h5>
+                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">Ver más</a>
             </div>
         </div>
     </div>
 </div>
+
+<hr class="section-divider" />
+
+<div class="contact-section">
+    <h2 class="section-title">Contáctenos</h2>
+    <p><strong>Teléfono:</strong> +506 2222-3344</p>
+    <p><strong>Email:</strong> info@universidadrealamericana.edu</p>
+    <p><strong>Horario:</strong> Lun a Vie · 8:00 a.m. – 6:00 p.m.</p>
+</div>
+
+<footer class="footer mt-5">
+    <p class="text-center">Sistema de Matrícula • Universidad Real Americana</p>
+</footer>

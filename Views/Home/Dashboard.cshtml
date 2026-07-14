@@ -1,0 +1,71 @@
+@{
+    ViewData["Title"] = "Dashboard Estudiante";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-start ura-box p-4 mb-4 flex-wrap gap-3">
+        <div>
+            <h1 class="mb-1">Bienvenido, @User.Identity?.Name</h1>
+            <p class="text-muted mb-0">Carrera: Ingeniería en Sistemas • Cuatrimestre II-2026</p>
+        </div>
+        <a asp-controller="Estudiante" asp-action="Cursos" class="btn btn-warning btn-sm mt-2">Ver cursos disponibles</a>
+<a asp-controller="Estudiante" asp-action="MisCursos" class="btn btn-outline-primary btn-sm mt-2">Mis cursos matriculados</a>
+        <div style="min-width: 260px;">
+            <p class="mb-1 fw-bold">Progreso académico</p>
+            <p class="text-muted mb-1" style="font-size: 0.9rem;">64% de la carrera completada</p>
+            <div class="progress" style="height: 10px;">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: 64%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="ura-box p-4 h-100">
+                <p class="text-muted mb-1">Créditos matriculados</p>
+                <h2 class="mb-0">18</h2>
+                <p class="text-muted mb-0" style="font-size: 0.85rem;">de 24 máximos</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="ura-box p-4 h-100">
+                <p class="text-muted mb-1">Cursos activos</p>
+                <h2 class="mb-0">6</h2>
+                <p class="text-muted mb-0" style="font-size: 0.85rem;">este cuatrimestre</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="ura-box p-4 h-100">
+                <p class="text-muted mb-1">Promedio general</p>
+                <h2 class="mb-0">87</h2>
+                <p class="text-muted mb-0" style="font-size: 0.85rem;">Desempeño alto</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="ura-box p-4 mt-4">
+        <h4 class="mb-1">Progreso del cuatrimestre</h4>
+        <p class="text-muted mb-3">5 cursos activos · 15 créditos · 75% asistencia promedio</p>
+
+        @{
+            var cursos = new (string Nombre, int Porcentaje)[]
+            {
+                ("Bases de Datos", 80),
+                ("Programación II", 65),
+                ("Cálculo III", 50),
+                ("Inglés Técnico", 90)
+            };
+        }
+
+        @foreach (var curso in cursos)
+        {
+            <div class="d-flex align-items-center mb-2">
+                <div style="min-width: 160px;">@curso.Nombre</div>
+                <div class="progress flex-grow-1 mx-3" style="height: 10px;">
+                    <div class="progress-bar" role="progressbar" style="width: @curso.Porcentaje%;"></div>
+                </div>
+                <div style="min-width: 40px;" class="text-end">@curso.Porcentaje%</div>
+            </div>
+        }
+    </div>
+</div>

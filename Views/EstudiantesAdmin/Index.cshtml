@@ -1,0 +1,44 @@
+@model List<SistemaMatriculaURA.Models.Estudiante>
+
+@{
+    ViewData["Title"] = "Gestión de Estudiantes";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-3">Gestión de Estudiantes</h1>
+
+    <a asp-action="Create" class="btn btn-primary mb-3">+ Registrar Estudiante</a>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <div class="ura-box p-3">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Carrera</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model)
+                {
+                    <tr>
+                        <td>@e.Nombre</td>
+                        <td>@e.Correo</td>
+                        <td>@e.Carrera?.Nombre</td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@e.Id" class="btn btn-sm btn-info">Detalles</a>
+                            <a asp-action="Edit" asp-route-id="@e.Id" class="btn btn-sm btn-warning">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@e.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

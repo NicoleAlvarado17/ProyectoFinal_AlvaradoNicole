@@ -7,65 +7,82 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ProyectoFinal_AlvaradoNicole.styles.css" asp-append-version="true" />
 </head>
 
-<body>
+<body style="background-color:#f5f5f5;">
 
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color: var(--ura-blue);">
+    <header class="ura-header">
+        <div class="container d-flex align-items-center justify-content-between py-3">
+            <div class="d-flex align-items-center">
+                <img src="~/img/logo-ura.png" style="height:70px;" class="me-3" />
+                <h2 class="text-white fw-bold mb-0">Universidad Real Americana</h2>
+            </div>
+
+            @if (User.Identity != null && User.Identity.IsAuthenticated &&
+                 !(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" &&
+                   ViewContext.RouteData.Values["action"]?.ToString() == "Index"))
+            {
+                <div class="d-flex align-items-center gap-2">
+                    <form asp-page="/Account/Logout" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-warning btn-sm">Salir</button>
+                    </form>
+                </div>
+            }
+        </div>
+    </header>
+
+    @* MENÚ DEL ADMIN  *@
+    @if (User.IsInRole("Admin") &&
+        !(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" &&
+          ViewContext.RouteData.Values["action"]?.ToString() == "Index"))
+    {
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
             <div class="container">
+                <a class="navbar-brand fw-bold">Panel Administrativo</a>
 
-                <a class="navbar-brand d-flex align-items-center"
-                   asp-controller="Home"
-                   asp-action="Index">
-                    <img src="~/img/logo-ura.png" alt="Universidad Real Americana" style="height:55px;" class="me-2" />
-                    <span class="fw-bold">Universidad Real Americana</span>
-                </a>
-
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarPrincipal"
-                        aria-controls="navbarPrincipal"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar"
+                        aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarPrincipal">
-                    <ul class="navbar-nav ms-auto">
+                <div class="collapse navbar-collapse" id="adminNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Home"
-                               asp-action="Index">
-                                Inicio
+                            <a class="nav-link" asp-controller="EstudiantesAdmin" asp-action="Index">
+                                Gestión de Estudiantes
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Carreras"
-                               asp-action="Index">
-                                Carreras
+                            <a class="nav-link" asp-controller="Docentes" asp-action="Index">
+                                Gestión de Profesores
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Cursos"
-                               asp-action="Index">
-                                Cursos
+                            <a class="nav-link" asp-controller="Carreras" asp-action="Index">
+                                Gestión de Carreras
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Cursos" asp-action="Index">
+                                Gestión de Cursos
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Matriculas" asp-action="Auditoria">
+                                Auditoría de Matrículas
                             </a>
                         </li>
 
                     </ul>
                 </div>
-
             </div>
         </nav>
-    </header>
+    }
 
     <div class="container mt-4">
         <main role="main" class="pb-3">
@@ -73,17 +90,15 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted mt-4">
-        <div class="container py-3">
+    <footer class="ura-footer text-center mt-5 py-3">
+        <div class="container">
             &copy; 2026 - Sistema de Matrícula • Universidad Real Americana
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>

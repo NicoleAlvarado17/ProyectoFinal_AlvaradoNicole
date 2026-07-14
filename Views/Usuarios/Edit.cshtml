@@ -1,0 +1,36 @@
+@model SistemaMatriculaURA.Models.Estudiante
+
+@{
+    ViewData["Title"] = "Editar Estudiante";
+}
+
+<div class="ura-box p-4">
+    <h2 class="mb-3">Editar Estudiante</h2>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label>Nombre</label>
+            <input asp-for="Nombre" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>Correo</label>
+            <input asp-for="Correo" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>Carrera</label>
+            <select asp-for="CarreraId" class="form-select">
+                @foreach (var c in ViewBag.Carreras)
+                {
+                    <option value="@c.Id">@c.Nombre</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

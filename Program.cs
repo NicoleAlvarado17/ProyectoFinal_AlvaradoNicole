@@ -4,12 +4,23 @@ using SistemaMatriculaURA.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Base de datos
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
-    options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+// Identity con ApplicationUser
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+});
 
 builder.Services.AddRazorPages();
 
@@ -20,7 +31,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    
     app.UseHsts();
 }
 
@@ -32,33 +42,50 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Ruta por defecto → Index (más seguro)
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
 
-// Crear rol Admin y usuario por defecto (se ejecuta una vez al iniciar)
+// Crear roles y usuario Admin por defecto
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
     try
     {
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
-        var adminRoleExists = await roleManager.RoleExistsAsync("Admin");
-        if (!adminRoleExists)
+        // Crear roles base si no existen
+        string[] roles = { "Admin", "Docente", "Estudiante" };
+        foreach (var role in roles)
         {
-            await roleManager.CreateAsync(new IdentityRole("Admin"));
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                await roleManager.CreateAsync(new IdentityRole(role));
+            }
         }
 
+        // Crear usuario Admin
         var adminEmail = "admin@sistema.com";
         var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
         if (adminUser == null)
         {
-            adminUser = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+            adminUser = new ApplicationUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                EmailConfirmed = true,
+                FullName = "Administrador del Sistema",
+                Carrera = "N/A"
+            };
+
             var result = await userManager.CreateAsync(adminUser, "Admin123!");
+
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(adminUser, "Admin");
@@ -68,7 +95,7 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Error creando rol/usuario Admin al iniciar la aplicación. Asegúrate de haber ejecutado las migraciones de Identity antes de iniciar la app.");
+        logger.LogError(ex, "Error creando roles/usuario Admin al iniciar la aplicación.");
     }
 }
 

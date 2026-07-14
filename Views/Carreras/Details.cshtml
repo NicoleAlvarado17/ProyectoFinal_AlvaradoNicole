@@ -1,0 +1,23 @@
+@model SistemaMatriculaURA.Models.Carrera
+
+@{
+    ViewData["Title"] = "Detalle Carrera";
+}
+
+<h2>Detalle de Carrera</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Id</dt>
+        <dd class="col-sm-10">@Model.Id</dd>
+
+        <dt class="col-sm-2">Nombre</dt>
+        <dd class="col-sm-10">@Model.Nombre</dd>
+
+        <dt class="col-sm-2">Código</dt>
+        <dd class="col-sm-10">@Model.Codigo</dd>
+    </dl>
+
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Volver</a>
+</div>

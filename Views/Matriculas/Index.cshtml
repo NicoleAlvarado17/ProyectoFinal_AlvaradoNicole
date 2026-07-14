@@ -1,0 +1,40 @@
+@model IEnumerable<SistemaMatriculaURA.Models.Matricula>
+
+@{
+    ViewData["Title"] = "Matrículas";
+}
+
+<h1>Matrículas</h1>
+
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary">Crear Matrícula</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Estudiante</th>
+            <th>Curso</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Estudiante?.Nombre</td>
+            <td>@item.Curso?.Nombre</td>
+            <td>@item.Fecha.ToShortDateString()</td>
+            <td>@item.Estado</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Ver</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger ms-1">Eliminar</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
