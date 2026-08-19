@@ -25,4 +25,13 @@
     <Folder Include="Views\Account\" />
   </ItemGroup>
 
+  <!-- El proyecto de pruebas vive en Tests\ (dentro de esta misma carpeta para
+       que quede incluido en el repositorio de Git). Se excluye explícitamente
+       de este proyecto web para que no se compile dos veces. -->
+  <ItemGroup>
+    <Compile Remove="Tests\**" />
+    <Content Remove="Tests\**" />
+    <None Remove="Tests\**" />
+  </ItemGroup>
+
 </Project>
