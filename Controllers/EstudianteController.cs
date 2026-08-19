@@ -296,17 +296,17 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             var carrera = await _context.Carreras.FirstOrDefaultAsync(c => c.Id == estudiante.CarreraId);
 
             using var ms = new MemoryStream();
-            var doc = new Document(PageSize.LETTER, 45, 45, 50, 50);
+            var doc = new Document(PageSize.Letter, 45, 45, 50, 50);
             PdfWriter.GetInstance(doc, ms);
             doc.Open();
 
             var azulURA = new BaseColor(20, 40, 90);
             var fontTitulo = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18, azulURA);
-            var fontSubtitulo = FontFactory.GetFont(FontFactory.HELVETICA, 12, BaseColor.DARK_GRAY);
-            var fontPequena = FontFactory.GetFont(FontFactory.HELVETICA, 8, BaseColor.GRAY);
+            var fontSubtitulo = FontFactory.GetFont(FontFactory.HELVETICA, 12, BaseColor.DarkGray);
+            var fontPequena = FontFactory.GetFont(FontFactory.HELVETICA, 8, BaseColor.Gray);
             var fontEtiqueta = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 10);
             var fontTexto = FontFactory.GetFont(FontFactory.HELVETICA, 10);
-            var fontHeaderTabla = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 9, BaseColor.WHITE);
+            var fontHeaderTabla = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 9, BaseColor.White);
             var fontCeldaTabla = FontFactory.GetFont(FontFactory.HELVETICA, 9);
             var fontTotal = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 13, azulURA);
 
