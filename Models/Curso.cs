@@ -1,4 +1,5 @@
-﻿
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+
 namespace SistemaMatriculaURA.Models
 {
     public class Curso
@@ -9,17 +10,25 @@ namespace SistemaMatriculaURA.Models
         public int Creditos { get; set; }
 
         // Campos adicionales usados por las vistas
-        public string Modalidad { get; set; } = "";  
+        public string Modalidad { get; set; } = "";
         public string Sede { get; set; } = "";
         public string Horario { get; set; } = "";
 
-       
+
         public int? DocenteId { get; set; }
+
+        // [ValidateNever]: propiedades de navegación que no vienen en el formulario
+        // (solo se envían los Id). Sin esto, ASP.NET Core las exige por ser tipos de
+        // referencia no-nullable y el ModelState queda inválido al crear/editar.
+        [ValidateNever]
         public Docente Docente { get; set; }
 
         public int CarreraId { get; set; }
+
+        [ValidateNever]
         public Carrera Carrera { get; set; }
 
+        [ValidateNever]
         public ICollection<Matricula> Matriculas { get; set; } = new List<Matricula>();
     }
 }
