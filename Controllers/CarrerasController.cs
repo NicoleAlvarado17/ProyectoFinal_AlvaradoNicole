@@ -16,9 +16,10 @@ public class CarrerasController : Controller
 
     // GET: CARRERAS
     [AllowAnonymous]
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index(int page = 1)
     {
-        var carreras = await _context.Carreras.ToListAsync();
+        var query = _context.Carreras.OrderBy(c => c.Nombre).AsQueryable();
+        var carreras = await PaginatedList<Carrera>.CreateAsync(query, page, 8);
         return View(carreras);
     }
 

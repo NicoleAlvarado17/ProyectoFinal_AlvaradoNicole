@@ -1,0 +1,42 @@
+@model ProyectoFinal_AlvaradoNicole.ViewComponents.PaginationViewModel
+@{
+    if (Model.TotalPages <= 1)
+    {
+        return;
+    }
+
+    Dictionary<string, string> RouteDataFor(int page)
+    {
+        var rv = new Microsoft.AspNetCore.Routing.RouteValueDictionary(Model.RouteValues);
+        rv["page"] = page;
+
+        var dict = new Dictionary<string, string>();
+        foreach (var kv in rv)
+        {
+            if (kv.Value != null)
+            {
+                dict[kv.Key] = kv.Value.ToString() ?? "";
+            }
+        }
+        return dict;
+    }
+}
+
+<nav aria-label="Paginación" class="mt-3">
+    <ul class="pagination">
+        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+            <a class="page-link" asp-action="@Model.Action" asp-all-route-data="RouteDataFor(Model.PageIndex - 1)">&laquo; Anterior</a>
+        </li>
+
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                <a class="page-link" asp-action="@Model.Action" asp-all-route-data="RouteDataFor(i)">@i</a>
+            </li>
+        }
+
+        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+            <a class="page-link" asp-action="@Model.Action" asp-all-route-data="RouteDataFor(Model.PageIndex + 1)">Siguiente &raquo;</a>
+        </li>
+    </ul>
+</nav>

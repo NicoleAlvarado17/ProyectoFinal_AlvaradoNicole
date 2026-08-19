@@ -1,0 +1,14 @@
+@model string
+@{
+    var badgeClass = Model switch
+    {
+        "Activo" => "bg-success",
+        "Activa" => "bg-success",
+        "Inactivo" => "bg-secondary",
+        "Congelado" => "bg-warning text-dark",
+        "Cerrado" => "bg-danger",
+        "Retirado" => "bg-danger",
+        _ => "bg-secondary"
+    };
+}
+<span class="badge @badgeClass">@Model</span>

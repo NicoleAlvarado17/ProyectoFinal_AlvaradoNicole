@@ -1,4 +1,4 @@
-@model IEnumerable<SistemaMatriculaURA.Models.Carrera>
+@model SistemaMatriculaURA.Models.PaginatedList<SistemaMatriculaURA.Models.Carrera>
 
 @{
     ViewData["Title"] = "Carreras";
@@ -20,7 +20,7 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model ?? Enumerable.Empty<SistemaMatriculaURA.Models.Carrera>())
+    @foreach (var item in Model)
     {
         <tr>
             <td>@item.Id</td>
@@ -35,3 +35,5 @@
     }
     </tbody>
 </table>
+
+@await Component.InvokeAsync("Pagination", new { pageIndex = Model.PageIndex, totalPages = Model.TotalPages, action = "Index" })

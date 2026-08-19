@@ -1,0 +1,10 @@
+@model ProyectoFinal_AlvaradoNicole.ViewComponents.StatCardViewModel
+
+<div class="ura-box p-4 h-100">
+    <p class="text-muted mb-1">@Model.Label</p>
+    <h2 class="mb-0">@Model.Value</h2>
+    @if (!string.IsNullOrWhiteSpace(Model.Subtitle))
+    {
+        <p class="text-muted mb-0" style="font-size: 0.85rem;">@Model.Subtitle</p>
+    }
+</div>

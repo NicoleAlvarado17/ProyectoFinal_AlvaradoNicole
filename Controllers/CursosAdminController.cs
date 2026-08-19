@@ -11,26 +11,33 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
     public class CursosAdminController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private const int PageSize = 8;
+
+        public static readonly string[] Modalidades = { "Presencial", "Virtual", "Híbrido" };
+        public static readonly string[] Sedes = { "San José", "Heredia", "Alajuela", "Online" };
+        public static readonly string[] Estados = { "Activo", "Inactivo", "Cerrado" };
 
         public CursosAdminController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var cursos = await _context.Cursos
+            var query = _context.Cursos
                 .Include(c => c.Carrera)
                 .Include(c => c.Docente)
-                .ToListAsync();
+                .OrderBy(c => c.Codigo)
+                .AsQueryable();
+
+            var cursos = await PaginatedList<Curso>.CreateAsync(query, page, PageSize);
 
             return View(cursos);
         }
 
         public IActionResult Create()
         {
-            ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre");
-            ViewBag.DocenteId = new SelectList(_context.Docentes, "Id", "Nombre");
+            CargarListas();
             return View();
         }
 
@@ -40,8 +47,7 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre");
-                ViewBag.DocenteId = new SelectList(_context.Docentes, "Id", "Nombre");
+                CargarListas(curso);
                 return View(curso);
             }
 
@@ -57,9 +63,7 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             var curso = await _context.Cursos.FindAsync(id);
             if (curso == null) return NotFound();
 
-            ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre", curso.CarreraId);
-            ViewBag.DocenteId = new SelectList(_context.Docentes, "Id", "Nombre", curso.DocenteId);
-
+            CargarListas(curso);
             return View(curso);
         }
 
@@ -71,8 +75,7 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre", curso.CarreraId);
-                ViewBag.DocenteId = new SelectList(_context.Docentes, "Id", "Nombre", curso.DocenteId);
+                CargarListas(curso);
                 return View(curso);
             }
 
@@ -81,6 +84,18 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             TempData["Success"] = "Curso actualizado correctamente.";
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var curso = await _context.Cursos
+                .Include(c => c.Carrera)
+                .Include(c => c.Docente)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (curso == null) return NotFound();
+
+            return View(curso);
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -109,6 +124,15 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private void CargarListas(Curso? curso = null)
+        {
+            ViewBag.CarreraId = new SelectList(_context.Carreras, "Id", "Nombre", curso?.CarreraId);
+            ViewBag.DocenteId = new SelectList(_context.Docentes, "Id", "Nombre", curso?.DocenteId);
+            ViewBag.Modalidades = new SelectList(Modalidades, curso?.Modalidad);
+            ViewBag.Sedes = new SelectList(Sedes, curso?.Sede);
+            ViewBag.Estados = new SelectList(Estados, curso?.Estado ?? "Activo");
         }
     }
 }

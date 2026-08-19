@@ -12,24 +12,15 @@
 
     <div class="row g-3">
         <div class="col-md-4">
-            <div class="ura-box p-4 h-100">
-                <p class="text-muted mb-1">Cursos asignados</p>
-                <h2 class="mb-0">@ViewBag.Cursos</h2>
-            </div>
+            @await Component.InvokeAsync("StatCard", new { label = "Cursos asignados", value = ViewBag.Cursos.ToString() })
         </div>
 
         <div class="col-md-4">
-            <div class="ura-box p-4 h-100">
-                <p class="text-muted mb-1">Estudiantes matriculados</p>
-                <h2 class="mb-0">@ViewBag.Estudiantes</h2>
-            </div>
+            @await Component.InvokeAsync("StatCard", new { label = "Estudiantes matriculados", value = ViewBag.Estudiantes.ToString() })
         </div>
 
         <div class="col-md-4">
-            <div class="ura-box p-4 h-100">
-                <p class="text-muted mb-1">Cuatrimestre actual</p>
-                <h2 class="mb-0">II-2026</h2>
-            </div>
+            @await Component.InvokeAsync("StatCard", new { label = "Cuatrimestre actual", value = "II-2026" })
         </div>
     </div>
 

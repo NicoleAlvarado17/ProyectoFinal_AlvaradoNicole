@@ -115,7 +115,7 @@ namespace ProyectoFinal_AlvaradoNicole.Pages.Account
                 await _signInManager.SignInAsync(user, isPersistent: false);
 
                 return rol == "Docente"
-                    ? LocalRedirect("/Home/DashboardDocente")
+                    ? LocalRedirect("/PanelDocente/DashboardDocente")
                     : LocalRedirect("/Home/Dashboard");
             }
 
