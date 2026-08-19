@@ -130,6 +130,42 @@ namespace SistemaMatriculaURA.Models
                 new Curso { Id = 29, Codigo = "CO-350", Nombre = "Impuestos", Creditos = 3, CarreraId = 6, Modalidad = "Virtual", Sede = "Online", Horario = "Lun/Mié 20:00-21:30", Estado = "Activo", Costo = 135000m }
             );
 
+            // Cursos adicionales (ampliación del plan de estudios, ficticios) para
+            // tener listados más largos y poder demostrar paginación y filtros
+            // (créditos, modalidad, profesor sin asignar) tanto en el catálogo del
+            // estudiante como en la Gestión de Cursos del administrador.
+            modelBuilder.Entity<Curso>().HasData(
+                // Ingeniería en Sistemas (CarreraId = 1)
+                new Curso { Id = 30, Codigo = "SC-410", Nombre = "Inteligencia Artificial", Creditos = 4, CarreraId = 1, Modalidad = "Híbrido", Sede = "San José", Horario = "Sáb 13:00-17:00", Estado = "Activo", Costo = 180000m },
+                new Curso { Id = 31, Codigo = "SC-215", Nombre = "Sistemas Operativos", Creditos = 3, CarreraId = 1, Modalidad = "Presencial", Sede = "San José", Horario = "Lun/Mié 07:00-09:00", Estado = "Activo", Costo = 135000m },
+                new Curso { Id = 32, Codigo = "SC-150", Nombre = "Introducción a la Programación", Creditos = 2, CarreraId = 1, Modalidad = "Virtual", Sede = "Online", Horario = "Mar/Jue 07:00-08:30", Estado = "Activo", Costo = 90000m },
+
+                // Administración de Empresas (CarreraId = 2)
+                new Curso { Id = 33, Codigo = "ADM-320", Nombre = "Gestión de Proyectos", Creditos = 3, CarreraId = 2, Modalidad = "Híbrido", Sede = "Heredia", Horario = "Vie 17:00-20:00", Estado = "Activo", Costo = 135000m },
+                new Curso { Id = 34, Codigo = "ADM-150", Nombre = "Matemática Financiera", Creditos = 2, CarreraId = 2, Modalidad = "Presencial", Sede = "San José", Horario = "Sáb 08:00-10:00", Estado = "Activo", Costo = 90000m },
+                new Curso { Id = 35, Codigo = "ADM-410", Nombre = "Comercio Internacional", Creditos = 4, CarreraId = 2, Modalidad = "Virtual", Sede = "Online", Horario = "Lun/Mié 19:00-21:00", Estado = "Activo", Costo = 180000m },
+
+                // Enfermería (CarreraId = 3)
+                new Curso { Id = 36, Codigo = "EN-150", Nombre = "Nutrición Clínica", Creditos = 2, CarreraId = 3, Modalidad = "Virtual", Sede = "Online", Horario = "Mar 14:00-16:00", Estado = "Activo", Costo = 90000m },
+                new Curso { Id = 37, Codigo = "EN-320", Nombre = "Salud Pública", Creditos = 3, CarreraId = 3, Modalidad = "Híbrido", Sede = "Alajuela", Horario = "Jue 13:00-16:00", Estado = "Activo", Costo = 135000m },
+                new Curso { Id = 38, Codigo = "EN-450", Nombre = "Enfermería Quirúrgica", Creditos = 4, CarreraId = 3, Modalidad = "Presencial", Sede = "San José", Horario = "Sáb 13:00-17:00", Estado = "Activo", Costo = 180000m },
+
+                // Derecho (CarreraId = 4)
+                new Curso { Id = 39, Codigo = "DE-150", Nombre = "Derecho Romano", Creditos = 2, CarreraId = 4, Modalidad = "Presencial", Sede = "San José", Horario = "Mar 18:00-19:30", Estado = "Activo", Costo = 90000m },
+                new Curso { Id = 40, Codigo = "DE-410", Nombre = "Derecho Internacional", Creditos = 4, CarreraId = 4, Modalidad = "Híbrido", Sede = "Heredia", Horario = "Vie 18:00-21:00", Estado = "Activo", Costo = 180000m },
+                new Curso { Id = 41, Codigo = "DE-320", Nombre = "Derecho Mercantil", Creditos = 3, CarreraId = 4, Modalidad = "Virtual", Sede = "Online", Horario = "Jue 18:00-20:30", Estado = "Activo", Costo = 135000m },
+
+                // Educación (CarreraId = 5)
+                new Curso { Id = 42, Codigo = "ED-160", Nombre = "Tecnología Educativa", Creditos = 2, CarreraId = 5, Modalidad = "Virtual", Sede = "Online", Horario = "Mar 16:00-17:30", Estado = "Activo", Costo = 90000m },
+                new Curso { Id = 43, Codigo = "ED-320", Nombre = "Gestión de Aula", Creditos = 3, CarreraId = 5, Modalidad = "Híbrido", Sede = "San José", Horario = "Sáb 09:00-12:00", Estado = "Activo", Costo = 135000m },
+                new Curso { Id = 44, Codigo = "ED-450", Nombre = "Necesidades Educativas Especiales", Creditos = 4, CarreraId = 5, Modalidad = "Presencial", Sede = "Alajuela", Horario = "Lun/Mié 15:00-17:00", Estado = "Activo", Costo = 180000m },
+
+                // Contabilidad (CarreraId = 6)
+                new Curso { Id = 45, Codigo = "CO-150", Nombre = "Matemática Financiera Contable", Creditos = 2, CarreraId = 6, Modalidad = "Presencial", Sede = "San José", Horario = "Mar 07:00-08:30", Estado = "Activo", Costo = 90000m },
+                new Curso { Id = 46, Codigo = "CO-410", Nombre = "Contabilidad de Costos Avanzada", Creditos = 4, CarreraId = 6, Modalidad = "Híbrido", Sede = "Heredia", Horario = "Sáb 13:00-17:00", Estado = "Activo", Costo = 180000m },
+                new Curso { Id = 47, Codigo = "CO-320", Nombre = "Normas Internacionales (NIIF)", Creditos = 3, CarreraId = 6, Modalidad = "Virtual", Sede = "Online", Horario = "Jue 19:00-21:00", Estado = "Activo", Costo = 135000m }
+            );
+
             modelBuilder.Entity<Matricula>().HasData(
                 new Matricula { Id = 1, EstudianteId = 1, CursoId = 1, Fecha = new DateTime(2026, 7, 1), Estado = "Activa" }
             );

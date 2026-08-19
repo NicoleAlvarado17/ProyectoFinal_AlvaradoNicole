@@ -21,11 +21,16 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             _userManager = userManager;
         }
 
+        private const int PageSizeCarreras = 3;
+
         // Página principal (muestra las carreras reales para que "Ver más" lleve
         // al plan de estudios real de cada una, en vez de un enlace genérico).
-        public async Task<IActionResult> Index()
+        // Paginada para poder mostrar listados largos de carreras sin sobrecargar
+        // la página de inicio.
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var carreras = await _context.Carreras.OrderBy(c => c.Nombre).ToListAsync();
+            var query = _context.Carreras.OrderBy(c => c.Nombre).AsQueryable();
+            var carreras = await PaginatedList<Carrera>.CreateAsync(query, page, PageSizeCarreras);
             return View(carreras);
         }
 

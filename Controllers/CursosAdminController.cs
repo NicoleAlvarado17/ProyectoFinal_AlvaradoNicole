@@ -22,13 +22,35 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int page = 1)
+        // Listado con paginación y filtros (créditos, modalidad/tipo, texto libre y
+        // "solo sin profesor asignado") para poder ubicar rápido los cursos que
+        // necesitan que se les asigne un docente, horario o modalidad.
+        public async Task<IActionResult> Index(int page = 1, int? creditos = null, string? modalidad = null, string? busqueda = null, bool soloSinAsignar = false)
         {
+            ViewBag.Modalidades = Modalidades;
+            ViewBag.CreditosSeleccionado = creditos;
+            ViewBag.ModalidadSeleccionada = modalidad;
+            ViewBag.Busqueda = busqueda;
+            ViewBag.SoloSinAsignar = soloSinAsignar;
+
             var query = _context.Cursos
                 .Include(c => c.Carrera)
                 .Include(c => c.Docente)
-                .OrderBy(c => c.Codigo)
                 .AsQueryable();
+
+            if (creditos.HasValue)
+                query = query.Where(c => c.Creditos == creditos.Value);
+
+            if (!string.IsNullOrWhiteSpace(modalidad))
+                query = query.Where(c => c.Modalidad == modalidad);
+
+            if (!string.IsNullOrWhiteSpace(busqueda))
+                query = query.Where(c => c.Nombre.Contains(busqueda) || c.Codigo.Contains(busqueda));
+
+            if (soloSinAsignar)
+                query = query.Where(c => c.DocenteId == null);
+
+            query = query.OrderBy(c => c.Codigo);
 
             var cursos = await PaginatedList<Curso>.CreateAsync(query, page, PageSize);
 

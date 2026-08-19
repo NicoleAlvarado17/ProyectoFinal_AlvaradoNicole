@@ -1,11 +1,61 @@
 @model SistemaMatriculaURA.Models.PaginatedList<SistemaMatriculaURA.Models.Curso>
+@{
+    var modalidades = (string[])ViewBag.Modalidades;
+    int? creditosSeleccionado = ViewBag.CreditosSeleccionado;
+    string? modalidadSeleccionada = ViewBag.ModalidadSeleccionada;
+    bool soloSinAsignar = ViewBag.SoloSinAsignar;
+}
 
 <div class="container mt-4">
     <h1>Gestión de Cursos</h1>
 
     <a asp-controller="CursosAdmin" asp-action="Create" class="btn btn-primary mb-3">+ Crear Curso</a>
 
-    <p class="text-muted">@Model.TotalCount curso(s) en total.</p>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <form class="row g-2 align-items-end mb-3" asp-action="Index" method="get">
+        <div class="col-auto">
+            <label class="form-label">Créditos</label>
+            <select name="creditos" class="form-select">
+                <option value="">Todos</option>
+                @for (var i = 2; i <= 4; i++)
+                {
+                    <option value="@i" selected="@(creditosSeleccionado == i ? "selected" : null)">@i</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <label class="form-label">Modalidad (tipo)</label>
+            <select name="modalidad" class="form-select">
+                <option value="">Todas</option>
+                @foreach (var m in modalidades)
+                {
+                    <option value="@m" selected="@(m == modalidadSeleccionada ? "selected" : null)">@m</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <label class="form-label">Buscar</label>
+            <input type="text" name="busqueda" class="form-control" placeholder="Código o nombre" value="@ViewBag.Busqueda" />
+        </div>
+
+        <div class="col-auto form-check mb-2">
+            <input type="checkbox" name="soloSinAsignar" value="true" class="form-check-input" id="soloSinAsignar" checked="@(soloSinAsignar ? "checked" : null)" />
+            <label class="form-check-label" for="soloSinAsignar">Solo sin profesor asignado</label>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
+        </div>
+    </form>
+
+    <p class="text-muted">@Model.TotalCount curso(s) encontrado(s).</p>
 
     <table class="table table-bordered table-striped">
         <thead>
@@ -32,7 +82,16 @@
                 <td>@c.Creditos</td>
                 <td>&#8353;@c.Costo.ToString("N0")</td>
                 <td>@c.Carrera?.Nombre</td>
-                <td>@c.Docente?.Nombre</td>
+                <td>
+                    @if (c.Docente != null)
+                    {
+                        @c.Docente.Nombre
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Sin asignar</span>
+                    }
+                </td>
                 <td>@c.Modalidad</td>
                 <td>@c.Sede</td>
                 <td>@c.Horario</td>
@@ -52,5 +111,17 @@
         </tbody>
     </table>
 
-    @await Component.InvokeAsync("Pagination", new { pageIndex = Model.PageIndex, totalPages = Model.TotalPages, action = "Index" })
+    @await Component.InvokeAsync("Pagination", new
+    {
+        pageIndex = Model.PageIndex,
+        totalPages = Model.TotalPages,
+        action = "Index",
+        routeValues = new
+        {
+            creditos = ViewBag.CreditosSeleccionado,
+            modalidad = ViewBag.ModalidadSeleccionada,
+            busqueda = ViewBag.Busqueda,
+            soloSinAsignar = ViewBag.SoloSinAsignar
+        }
+    })
 </div>
