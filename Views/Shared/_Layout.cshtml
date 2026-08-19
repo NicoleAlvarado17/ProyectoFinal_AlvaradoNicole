@@ -92,6 +92,82 @@
         </nav>
     }
 
+    @* MENÚ DEL DOCENTE *@
+    @if (User.IsInRole("Docente") &&
+        !(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" &&
+          ViewContext.RouteData.Values["action"]?.ToString() == "Index"))
+    {
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-controller="PanelDocente" asp-action="DashboardDocente">Panel Docente</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#docenteNavbar"
+                        aria-controls="docenteNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="docenteNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="PanelDocente" asp-action="DashboardDocente">
+                                Dashboard
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="PanelDocente" asp-action="CargaAcademica">
+                                Carga Académica
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    }
+
+    @* MENÚ DEL ESTUDIANTE *@
+    @if (User.IsInRole("Estudiante") &&
+        !(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" &&
+          ViewContext.RouteData.Values["action"]?.ToString() == "Index"))
+    {
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Dashboard">Panel Estudiante</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#estudianteNavbar"
+                        aria-controls="estudianteNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="estudianteNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Dashboard">
+                                Dashboard
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Estudiante" asp-action="Cursos">
+                                Cursos Disponibles
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Estudiante" asp-action="MisCursos">
+                                Mis Cursos
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    }
+
     <div class="container mt-4">
         <main role="main" class="pb-3">
             @RenderBody()

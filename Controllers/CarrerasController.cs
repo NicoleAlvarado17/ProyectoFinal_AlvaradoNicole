@@ -23,6 +23,33 @@ public class CarrerasController : Controller
         return View(carreras);
     }
 
+    // GET: CARRERAS/PlanEstudios/5 - página pública con el plan de estudios
+    // (los cursos activos) de una carrera específica. Es lo que se muestra al
+    // dar clic en "Ver más" desde las tarjetas de carreras en la página de inicio.
+    [AllowAnonymous]
+    public async Task<IActionResult> PlanEstudios(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var carrera = await _context.Carreras.FirstOrDefaultAsync(c => c.Id == id);
+        if (carrera == null)
+        {
+            return NotFound();
+        }
+
+        var cursos = await _context.Cursos
+            .Include(c => c.Docente)
+            .Where(c => c.CarreraId == id && c.Estado == "Activo")
+            .OrderBy(c => c.Nombre)
+            .ToListAsync();
+
+        ViewBag.Carrera = carrera;
+        return View(cursos);
+    }
+
     // GET: CARRERAS/Details
     public async Task<IActionResult> Details(int? id)
     {

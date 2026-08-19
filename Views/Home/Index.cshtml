@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<SistemaMatriculaURA.Models.Carrera>
+@{
     ViewData["Title"] = "Página de Inicio";
 }
 
@@ -30,59 +31,24 @@
 <h2 class="section-title">Carreras Destacadas</h2>
 
 <div class="row mt-4">
-    <div class="col-md-4 mb-3">
-        <div class="card carrera-card shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Ingeniería en Sistemas (IS)</h5>
-                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">Ver más</a>
+    @if (!Model.Any())
+    {
+        <p class="text-muted">Todavía no hay carreras registradas.</p>
+    }
+    else
+    {
+        @foreach (var carrera in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card carrera-card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@carrera.Nombre (@carrera.Codigo)</h5>
+                        <a class="btn btn-primary" asp-controller="Carreras" asp-action="PlanEstudios" asp-route-id="@carrera.Id">Ver más</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <div class="card carrera-card shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Administración (AD)</h5>
-                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">Ver más</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <div class="card carrera-card shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Enfermería (EN)</h5>
-                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">Ver más</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <div class="card carrera-card shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Derecho (DE)</h5>
-                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">Ver más</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <div class="card carrera-card shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Educación (ED)</h5>
-                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">Ver más</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <div class="card carrera-card shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Contabilidad (CO)</h5>
-                <a class="btn btn-primary" asp-controller="Carreras" asp-action="Index">Ver más</a>
-            </div>
-        </div>
-    </div>
+        }
+    }
 </div>
 
 <hr class="section-divider" />
