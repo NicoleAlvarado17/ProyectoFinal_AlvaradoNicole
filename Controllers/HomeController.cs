@@ -21,10 +21,12 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             _userManager = userManager;
         }
 
-        // Página principal
-        public IActionResult Index()
+        // Página principal (muestra las carreras reales para que "Ver más" lleve
+        // al plan de estudios real de cada una, en vez de un enlace genérico).
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var carreras = await _context.Carreras.OrderBy(c => c.Nombre).ToListAsync();
+            return View(carreras);
         }
 
         // Dashboard Estudiante (HU07/HU10/HU11 - datos reales del estudiante autenticado)

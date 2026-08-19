@@ -1,0 +1,51 @@
+@model IEnumerable<SistemaMatriculaURA.Models.Curso>
+@{
+    var carrera = (SistemaMatriculaURA.Models.Carrera)ViewBag.Carrera;
+    ViewData["Title"] = "Plan de Estudios - " + carrera.Nombre;
+}
+
+<div class="mb-3">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">&larr; Volver al inicio</a>
+</div>
+
+<h1>Plan de Estudios</h1>
+<h4 class="text-muted mb-4">@carrera.Nombre (@carrera.Codigo)</h4>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Todavía no hay cursos publicados para esta carrera.</p>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Curso</th>
+                <th>Créditos</th>
+                <th>Modalidad</th>
+                <th>Sede</th>
+                <th>Horario</th>
+                <th>Docente</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var curso in Model)
+            {
+                <tr>
+                    <td>@curso.Codigo</td>
+                    <td>@curso.Nombre</td>
+                    <td>@curso.Creditos</td>
+                    <td>@curso.Modalidad</td>
+                    <td>@curso.Sede</td>
+                    <td>@curso.Horario</td>
+                    <td>@(curso.Docente != null ? curso.Docente.Nombre : "Por asignar")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p class="text-muted">Total de créditos del plan: <strong>@Model.Sum(c => c.Creditos)</strong></p>
+}
+
+<a asp-page="/Account/Register" class="btn btn-warning">Matricularme en esta carrera</a>
