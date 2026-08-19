@@ -36,6 +36,12 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             var userId = _userManager.GetUserId(User);
             var email = User.Identity?.Name;
 
+            // El nombre para mostrar debe ser el nombre real de la persona, no su
+            // correo (User.Identity.Name es el UserName de Identity, que aquí es
+            // el correo). Se toma de ApplicationUser.FullName, con el registro de
+            // Estudiante como respaldo si por alguna razón difiere.
+            var appUser = await _userManager.GetUserAsync(User);
+
             var estudiante = await _context.Estudiantes
                 .Include(e => e.Carrera)
                 .FirstOrDefaultAsync(e => e.UserId == userId || e.Correo == email);
@@ -43,7 +49,11 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             if (estudiante == null)
             {
                 // Aún no tiene registro en Estudiantes (se crea al visitar el catálogo de cursos).
-                return View(new EstudianteDashboardViewModel { NombreCarrera = "Sin carrera asignada" });
+                return View(new EstudianteDashboardViewModel
+                {
+                    NombreEstudiante = appUser?.FullName ?? email ?? "Estudiante",
+                    NombreCarrera = "Sin carrera asignada"
+                });
             }
 
             var matriculasActivas = await _context.Matriculas
@@ -53,6 +63,7 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             var vm = new EstudianteDashboardViewModel
             {
+                NombreEstudiante = appUser?.FullName ?? estudiante.Nombre,
                 NombreCarrera = estudiante.Carrera?.Nombre ?? "Sin carrera asignada",
                 CreditosMatriculados = matriculasActivas.Sum(m => m.Curso.Creditos),
                 CursosActivos = matriculasActivas.Count,
