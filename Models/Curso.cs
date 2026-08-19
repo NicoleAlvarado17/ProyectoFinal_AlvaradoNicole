@@ -1,4 +1,5 @@
-﻿namespace SistemaMatriculaURA.Models
+﻿
+namespace SistemaMatriculaURA.Models
 {
     public class Curso
     {
@@ -8,10 +9,13 @@
         public int Creditos { get; set; }
 
         // Campos adicionales usados por las vistas
-        public string Modalidad { get; set; } = "";
+        public string Modalidad { get; set; } = "";  
         public string Sede { get; set; } = "";
         public string Horario { get; set; } = "";
-        public string Profesor { get; set; } = "";
+
+       
+        public int? DocenteId { get; set; }
+        public Docente Docente { get; set; }
 
         public int CarreraId { get; set; }
         public Carrera Carrera { get; set; }

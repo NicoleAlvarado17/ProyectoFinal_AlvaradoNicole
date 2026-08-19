@@ -1,0 +1,54 @@
+@model SistemaMatriculaURA.Models.Curso
+
+<div class="container mt-4">
+    <h1>Editar Curso</h1>
+
+    <div class="ura-box p-4" style="max-width: 600px;">
+       <form asp-action="Edit" asp-controller="CursosAdmin" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label asp-for="Codigo" class="form-label"></label>
+                <input asp-for="Codigo" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Nombre" class="form-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Creditos" class="form-label"></label>
+                <input asp-for="Creditos" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CarreraId" class="form-label"></label>
+                <select asp-for="CarreraId" asp-items="ViewBag.CarreraId" class="form-select"></select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DocenteId" class="form-label"></label>
+                <select asp-for="DocenteId" asp-items="ViewBag.DocenteId" class="form-select"></select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Modalidad" class="form-label"></label>
+                <input asp-for="Modalidad" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Sede" class="form-label"></label>
+                <input asp-for="Sede" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Horario" class="form-label"></label>
+                <input asp-for="Horario" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-success">Guardar cambios</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

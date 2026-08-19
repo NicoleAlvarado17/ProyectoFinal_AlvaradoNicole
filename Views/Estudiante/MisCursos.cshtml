@@ -1,95 +1,54 @@
 @model List<ProyectoFinal_AlvaradoNicole.Controllers.MiCursoViewModel>
 
-@{
-    ViewData["Title"] = "Mis Cursos";
-}
-
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>Mis Cursos</h1>
-        <div>
-            <a asp-controller="Estudiante" asp-action="Cursos" class="btn btn-warning">+ Matricular otro curso</a>
-            <a asp-controller="Home" asp-action="Dashboard" class="btn btn-outline-secondary">&larr; Volver al Dashboard</a>
-            <a asp-controller="Estudiante" asp-action="Comprobante" class="btn btn-primary">Descargar Comprobante PDF</a>
-        </div>
-    </div>
+    <h1>Mis Cursos</h1>
 
     @if (TempData["Success"] != null)
     {
         <div class="alert alert-success">@TempData["Success"]</div>
     }
 
-    @if (!Model.Any())
-    {
-        <div class="ura-box p-4 text-center">
-            <p class="text-muted mb-3">Todavía no tenés cursos matriculados.</p>
-            <a asp-controller="Estudiante" asp-action="Cursos" class="btn btn-primary">Ver cursos disponibles</a>
-        </div>
-    }
-    else
-    {
-        <div class="ura-box p-3">
-            <table class="table table-hover mb-0">
-                <thead>
-                    <tr>
-                        <th>Código</th>
-                        <th>Curso</th>
-                        <th>Carrera</th>
-                        <th>Créditos</th>
-                        <th>Modalidad</th>
-                        <th>Sede</th>
-                        <th>Horario</th>
-                        <th>Profesor</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var curso in Model)
-                    {
-                        <tr>
-                            <td>@curso.Codigo</td>
-                            <td>@curso.Nombre</td>
-                            <td>@curso.Carrera</td>
-                            <td>@curso.Creditos</td>
-                            <td>@curso.Modalidad</td>
-                            <td>@curso.Sede</td>
-                            <td>@curso.Horario</td>
-                            <td>@curso.Profesor</td>
-                            <td>
-                                <span class="badge bg-success">@curso.Estado</span>
-                            </td>
-                            <td>@curso.Fecha.ToString("dd/MM/yyyy")</td>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Carrera</th>
+                <th>Créditos</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th>Horario</th>
+                <th>Docente</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td>@m.Codigo</td>
+                    <td>@m.Nombre</td>
+                    <td>@m.Carrera</td>
+                    <td>@m.Creditos</td>
+                    <td>@m.Estado</td>
+                    <td>@m.Fecha.ToShortDateString()</td>
+                    <td>@m.Horario</td>
+                    <td>@m.Docente</td>
+                    <td>
+                        <form asp-action="Congelar" method="post" style="display:inline;">
+                            <input type="hidden" name="matriculaId" value="@m.MatriculaId" />
+                            <button class="btn btn-warning btn-sm">Congelar</button>
+                        </form>
 
-                            <td class="d-flex gap-2">
+                        <form asp-action="Desmatricular" method="post" style="display:inline;">
+                            <input type="hidden" name="cursoId" value="@m.CursoId" />
+                            <button class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-                                <!-- BOTÓN CONGELAR -->
-                                <form asp-action="Congelar" method="post" class="d-inline">
-                                    <input type="hidden" name="matriculaId" value="@curso.MatriculaId" />
-                                    <button type="submit" class="btn btn-sm btn-secondary">
-                                        Congelar
-                                    </button>
-                                </form>
-
-                                
-                                <form asp-action="Desmatricular" method="post" class="d-inline"
-                                      onsubmit="return confirm('¿Eliminar este curso de tu matrícula?');">
-                                    <input type="hidden" name="cursoId" value="@curso.CursoId" />
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">
-                                        Eliminar
-                                    </button>
-                                </form>
-
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-
-        <div class="ura-box p-3 mt-3 text-muted">
-            Total: @Model.Count curso(s) · @Model.Sum(c => c.Creditos) créditos matriculados
-        </div>
-    }
+    <a asp-action="Comprobante" class="btn btn-success">Descargar Comprobante PDF</a>
 </div>

@@ -1,0 +1,24 @@
+@model IEnumerable<SistemaMatriculaURA.Models.Matricula>
+
+<h2>Asistencia – @ViewBag.Curso.Nombre</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Estudiante</th>
+            <th>Asistencia</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var m in Model)
+        {
+            <tr>
+                <td>@m.Estudiante.Nombre</td>
+                <td>
+                    <input type="checkbox" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

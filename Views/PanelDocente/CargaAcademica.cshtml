@@ -1,0 +1,47 @@
+@model IEnumerable<SistemaMatriculaURA.Models.Curso>
+
+<h2>Carga Académica</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Curso</th>
+            <th>Modalidad</th>
+            <th>Sede</th>
+            <th>Horario</th>
+            <th>Lista de Clase</th>
+            <th>Asistencia</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Nombre</td>
+                <td>@c.Modalidad</td>
+                <td>@c.Sede</td>
+                <td>@c.Horario</td>
+
+                <td>
+                    <a class="btn btn-info btn-sm"
+                       asp-action="ListaClase"
+                       asp-route-cursoId="@c.Id">Ver</a>
+                </td>
+
+                <td>
+                    @if (c.Modalidad.ToLower() == "presencial")
+                    {
+                        <a class="btn btn-warning btn-sm"
+                           asp-action="Asistencia"
+                           asp-route-cursoId="@c.Id">Registrar</a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Virtual</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -20,13 +20,9 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Carrera</label>
-                <select asp-for="CarreraId" class="form-select">
-                    @foreach (var c in ViewBag.Carreras)
-                    {
-                        <option value="@c.Id">@c.Nombre</option>
-                    }
-                </select>
+                <label asp-for="CarreraId" class="form-label"></label>
+                <select asp-for="CarreraId" asp-items="ViewBag.CarreraId" class="form-select"></select>
+                <span asp-validation-for="CarreraId" class="text-danger"></span>
             </div>
 
             <button type="submit" class="btn btn-success">Guardar</button>

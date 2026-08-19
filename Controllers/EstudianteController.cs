@@ -143,7 +143,8 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
                 Modalidad = m.Curso.Modalidad,
                 Sede = m.Curso.Sede,
                 Horario = m.Curso.Horario,
-                Profesor = m.Curso.Profesor
+                Docente = m.Curso.Docente?.Nombre ?? "Sin asignar"
+
             }).ToList();
 
             return View(vm);
@@ -243,6 +244,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         public string Modalidad { get; set; } = "";
         public string Sede { get; set; } = "";
         public string Horario { get; set; } = "";
-        public string Profesor { get; set; } = "";
+        public string Docente { get; set; } = "";
     }
 }
