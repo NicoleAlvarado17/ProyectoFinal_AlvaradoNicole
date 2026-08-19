@@ -48,6 +48,9 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             var docente = await _context.Docentes
                 .FirstOrDefaultAsync(d => d.Correo == correo);
 
+            if (docente == null)
+                return Content("No se encontró el docente asociado a este usuario.");
+
             var cursos = await _context.Cursos
                 .Where(c => c.DocenteId == docente.Id)
                 .ToListAsync();

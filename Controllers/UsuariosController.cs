@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SistemaMatriculaURA.Models;
 
 namespace ProyectoFinal_AlvaradoNicole.Controllers
@@ -11,11 +12,13 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly RoleManager<IdentityRole> _roleManager;
+		private readonly ApplicationDbContext _context;
 
-		public UsuariosController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+		public UsuariosController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
 		{
 			_userManager = userManager;
 			_roleManager = roleManager;
+			_context = context;
 		}
 
 		// GET: /Usuarios
@@ -84,6 +87,36 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 				}
 
 				await _userManager.AddToRoleAsync(user, model.Role);
+
+				// El Panel Docente y el catálogo de cursos buscan a la persona por
+				// correo en las tablas Docentes/Estudiantes; sin este registro, un
+				// usuario creado aquí por el administrador quedaría sin panel funcional.
+				if (model.Role == "Docente" && !await _context.Docentes.AnyAsync(d => d.Correo == user.Email))
+				{
+					_context.Docentes.Add(new Docente
+					{
+						Nombre = user.FullName,
+						Correo = user.Email!,
+						Especialidad = "Por definir"
+					});
+					await _context.SaveChangesAsync();
+				}
+				else if (model.Role == "Estudiante" && !await _context.Estudiantes.AnyAsync(e => e.Correo == user.Email))
+				{
+					var carrera = await _context.Carreras.FirstOrDefaultAsync();
+					if (carrera != null)
+					{
+						_context.Estudiantes.Add(new Estudiante
+						{
+							Nombre = user.FullName,
+							Correo = user.Email!,
+							CarreraId = carrera.Id,
+							UserId = user.Id
+						});
+						await _context.SaveChangesAsync();
+					}
+				}
+
 				TempData["Success"] = $"Usuario {model.Email} creado con rol {model.Role}.";
 				return RedirectToAction(nameof(Index));
 			}
