@@ -9,6 +9,10 @@ namespace SistemaMatriculaURA.Models
         public string Nombre { get; set; } = "";
         public int Creditos { get; set; }
 
+        // Costo del curso en colones (₡), usado en el catálogo y en el
+        // comprobante de matrícula (factura) que descarga el estudiante.
+        public decimal Costo { get; set; }
+
         // Campos adicionales usados por las vistas
         public string Modalidad { get; set; } = "";
         public string Sede { get; set; } = "";

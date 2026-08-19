@@ -23,6 +23,7 @@ else
                 <th>Código</th>
                 <th>Curso</th>
                 <th>Créditos</th>
+                <th>Costo</th>
                 <th>Modalidad</th>
                 <th>Sede</th>
                 <th>Horario</th>
@@ -36,6 +37,7 @@ else
                     <td>@curso.Codigo</td>
                     <td>@curso.Nombre</td>
                     <td>@curso.Creditos</td>
+                    <td>&#8353;@curso.Costo.ToString("N0")</td>
                     <td>@curso.Modalidad</td>
                     <td>@curso.Sede</td>
                     <td>@curso.Horario</td>
@@ -45,7 +47,11 @@ else
         </tbody>
     </table>
 
-    <p class="text-muted">Total de créditos del plan: <strong>@Model.Sum(c => c.Creditos)</strong></p>
+    <p class="text-muted">
+        Total de créditos del plan: <strong>@Model.Sum(c => c.Creditos)</strong>
+        &nbsp;&middot;&nbsp;
+        Costo total del plan: <strong>&#8353;@Model.Sum(c => c.Costo).ToString("N0")</strong>
+    </p>
 }
 
 <a asp-page="/Account/Register" class="btn btn-warning">Matricularme en esta carrera</a>

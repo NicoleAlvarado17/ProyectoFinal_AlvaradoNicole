@@ -23,6 +23,11 @@
             </div>
 
             <div class="mb-3">
+                <label asp-for="Costo" class="form-label">Costo (&#8353;)</label>
+                <input asp-for="Costo" class="form-control" type="number" step="0.01" min="0" />
+            </div>
+
+            <div class="mb-3">
                 <label asp-for="CarreraId" class="form-label"></label>
                 <select asp-for="CarreraId" asp-items="ViewBag.CarreraId" class="form-select"></select>
             </div>

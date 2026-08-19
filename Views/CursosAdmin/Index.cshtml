@@ -13,6 +13,7 @@
                 <th>Código</th>
                 <th>Nombre</th>
                 <th>Créditos</th>
+                <th>Costo</th>
                 <th>Carrera</th>
                 <th>Docente</th>
                 <th>Modalidad</th>
@@ -29,6 +30,7 @@
                 <td>@c.Codigo</td>
                 <td>@c.Nombre</td>
                 <td>@c.Creditos</td>
+                <td>&#8353;@c.Costo.ToString("N0")</td>
                 <td>@c.Carrera?.Nombre</td>
                 <td>@c.Docente?.Nombre</td>
                 <td>@c.Modalidad</td>

@@ -6,6 +6,7 @@ using SistemaMatriculaURA.Models;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.IO;
+using System.Globalization;
 
 namespace ProyectoFinal_AlvaradoNicole.Controllers
 {
@@ -129,6 +130,7 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
                 Codigo = c.Codigo,
                 Nombre = c.Nombre,
                 Creditos = c.Creditos,
+                Costo = c.Costo,
                 Modalidad = c.Modalidad,
                 Sede = c.Sede,
                 CarreraNombre = c.Carrera != null ? c.Carrera.Nombre : "",
@@ -154,6 +156,13 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             if (!yaExiste)
             {
+                var curso = await _context.Cursos.FindAsync(cursoId);
+                if (curso == null)
+                {
+                    TempData["Error"] = "El curso seleccionado ya no existe.";
+                    return RedirectToAction(nameof(Cursos));
+                }
+
                 var matricula = new Matricula
                 {
                     EstudianteId = estudiante.Id,
@@ -163,6 +172,22 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
                 };
                 _context.Matriculas.Add(matricula);
                 await _context.SaveChangesAsync();
+
+                // Registra la transacción de pago de la matrícula (HU-Pago). El número
+                // de transacción se basa en el Id de la matrícula para que sea único
+                // y fácil de rastrear en el comprobante.
+                var pago = new Pago
+                {
+                    MatriculaId = matricula.Id,
+                    Monto = curso.Costo,
+                    FechaPago = DateTime.Now,
+                    NumeroTransaccion = $"TXN-{matricula.Id:D8}",
+                    MetodoPago = "Tarjeta de crédito",
+                    Estado = "Completado"
+                };
+                _context.Pagos.Add(pago);
+                await _context.SaveChangesAsync();
+
                 TempData["Success"] = "Curso matriculado correctamente.";
             }
 
@@ -192,6 +217,7 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
                 Nombre = m.Curso.Nombre,
                 Carrera = m.Curso.Carrera != null ? m.Curso.Carrera.Nombre : "",
                 Creditos = m.Curso.Creditos,
+                Costo = m.Curso.Costo,
                 Estado = m.Estado,
                 Fecha = m.Fecha,
                 Modalidad = m.Curso.Modalidad,
@@ -243,32 +269,134 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             return RedirectToAction(nameof(MisCursos));
         }
 
+        // Comprobante de matrícula en formato de factura: incluye número de
+        // comprobante, datos del estudiante, tabla de cursos con su costo, total
+        // y el detalle de las transacciones de pago (tabla Pagos) asociadas.
         public async Task<IActionResult> Comprobante()
         {
             var estudiante = await GetOrCreateEstudianteAsync();
+            if (estudiante == null)
+            {
+                TempData["Error"] = "No se pudo generar el comprobante: no se encontró tu perfil de estudiante.";
+                return RedirectToAction(nameof(MisCursos));
+            }
+
             var matriculas = await _context.Matriculas
                 .Include(m => m.Curso)
                 .Where(m => m.EstudianteId == estudiante.Id)
+                .OrderBy(m => m.Fecha)
                 .ToListAsync();
 
+            var matriculaIds = matriculas.Select(m => m.Id).ToList();
+            var pagos = await _context.Pagos
+                .Where(p => matriculaIds.Contains(p.MatriculaId))
+                .OrderBy(p => p.FechaPago)
+                .ToListAsync();
+
+            var carrera = await _context.Carreras.FirstOrDefaultAsync(c => c.Id == estudiante.CarreraId);
+
             using var ms = new MemoryStream();
-            var doc = new Document();
+            var doc = new Document(PageSize.LETTER, 45, 45, 50, 50);
             PdfWriter.GetInstance(doc, ms);
-
             doc.Open();
-            doc.Add(new Paragraph("Comprobante de Matrícula"));
-            doc.Add(new Paragraph($"Estudiante: {estudiante.Nombre}"));
-            doc.Add(new Paragraph($"Correo: {estudiante.Correo}"));
-            doc.Add(new Paragraph(" "));
 
-            foreach (var m in matriculas)
+            var azulURA = new BaseColor(20, 40, 90);
+            var fontTitulo = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18, azulURA);
+            var fontSubtitulo = FontFactory.GetFont(FontFactory.HELVETICA, 12, BaseColor.DARK_GRAY);
+            var fontPequena = FontFactory.GetFont(FontFactory.HELVETICA, 8, BaseColor.GRAY);
+            var fontEtiqueta = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 10);
+            var fontTexto = FontFactory.GetFont(FontFactory.HELVETICA, 10);
+            var fontHeaderTabla = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 9, BaseColor.WHITE);
+            var fontCeldaTabla = FontFactory.GetFont(FontFactory.HELVETICA, 9);
+            var fontTotal = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 13, azulURA);
+
+            var numeroComprobante = $"CMP-{estudiante.Id:D6}-{DateTime.Now:yyyyMMddHHmmss}";
+
+            doc.Add(new Paragraph("Universidad Real Americana", fontTitulo) { Alignment = Element.ALIGN_CENTER });
+            doc.Add(new Paragraph("Comprobante de Matrícula", fontSubtitulo) { Alignment = Element.ALIGN_CENTER, SpacingAfter = 2 });
+            doc.Add(new Paragraph("San José, Costa Rica  ·  Tel. +506 2222-3344  ·  info@universidadrealamericana.edu", fontPequena) { Alignment = Element.ALIGN_CENTER, SpacingAfter = 10 });
+            doc.Add(new Paragraph(new string('-', 100), fontPequena) { SpacingAfter = 10 });
+
+            doc.Add(new Paragraph($"N° de comprobante: {numeroComprobante}", fontEtiqueta));
+            doc.Add(new Paragraph($"Fecha de emisión: {DateTime.Now:dd/MM/yyyy HH:mm}", fontTexto) { SpacingAfter = 8 });
+
+            doc.Add(new Paragraph($"Estudiante: {estudiante.Nombre}", fontEtiqueta));
+            doc.Add(new Paragraph($"Correo: {estudiante.Correo}", fontTexto));
+            doc.Add(new Paragraph($"Carrera: {carrera?.Nombre ?? "Sin carrera asignada"}", fontTexto));
+            doc.Add(new Paragraph($"Identificación de estudiante: EST-{estudiante.Id:D5}", fontTexto) { SpacingAfter = 12 });
+
+            if (!matriculas.Any())
             {
-                doc.Add(new Paragraph($"{m.Curso.Codigo} - {m.Curso.Nombre} ({m.Estado})"));
+                doc.Add(new Paragraph("No tienes cursos matriculados actualmente.", fontTexto));
             }
+            else
+            {
+                var tabla = new PdfPTable(5) { WidthPercentage = 100, SpacingBefore = 6 };
+                tabla.SetWidths(new float[] { 1.2f, 3f, 1f, 1.4f, 1.4f });
+
+                foreach (var encabezado in new[] { "Código", "Curso", "Créd.", "Estado", "Costo" })
+                {
+                    var celda = new PdfPCell(new Phrase(encabezado, fontHeaderTabla))
+                    {
+                        BackgroundColor = azulURA,
+                        Padding = 6,
+                        HorizontalAlignment = Element.ALIGN_CENTER
+                    };
+                    tabla.AddCell(celda);
+                }
+
+                decimal total = 0m;
+                foreach (var m in matriculas)
+                {
+                    tabla.AddCell(new PdfPCell(new Phrase(m.Curso.Codigo, fontCeldaTabla)) { Padding = 5, HorizontalAlignment = Element.ALIGN_CENTER });
+                    tabla.AddCell(new PdfPCell(new Phrase(m.Curso.Nombre, fontCeldaTabla)) { Padding = 5 });
+                    tabla.AddCell(new PdfPCell(new Phrase(m.Curso.Creditos.ToString(), fontCeldaTabla)) { Padding = 5, HorizontalAlignment = Element.ALIGN_CENTER });
+                    tabla.AddCell(new PdfPCell(new Phrase(m.Estado, fontCeldaTabla)) { Padding = 5, HorizontalAlignment = Element.ALIGN_CENTER });
+                    tabla.AddCell(new PdfPCell(new Phrase("₡" + m.Curso.Costo.ToString("N0", CultureInfo.InvariantCulture), fontCeldaTabla)) { Padding = 5, HorizontalAlignment = Element.ALIGN_RIGHT });
+                    total += m.Curso.Costo;
+                }
+
+                var celdaTotalEtiqueta = new PdfPCell(new Phrase("TOTAL", fontTotal))
+                {
+                    Colspan = 4,
+                    Border = Rectangle.TOP_BORDER,
+                    BorderColor = azulURA,
+                    HorizontalAlignment = Element.ALIGN_RIGHT,
+                    Padding = 8
+                };
+                var celdaTotalValor = new PdfPCell(new Phrase("₡" + total.ToString("N0", CultureInfo.InvariantCulture), fontTotal))
+                {
+                    Border = Rectangle.TOP_BORDER,
+                    BorderColor = azulURA,
+                    HorizontalAlignment = Element.ALIGN_RIGHT,
+                    Padding = 8
+                };
+                tabla.AddCell(celdaTotalEtiqueta);
+                tabla.AddCell(celdaTotalValor);
+
+                doc.Add(tabla);
+
+                if (pagos.Any())
+                {
+                    doc.Add(new Paragraph("Detalle de pago", fontEtiqueta) { SpacingBefore = 14, SpacingAfter = 4 });
+                    foreach (var p in pagos)
+                    {
+                        doc.Add(new Paragraph(
+                            $"Transacción {p.NumeroTransaccion}  ·  {p.MetodoPago}  ·  {p.FechaPago:dd/MM/yyyy}  ·  {p.Estado}  ·  ₡{p.Monto.ToString("N0", CultureInfo.InvariantCulture)}",
+                            fontPequena));
+                    }
+                }
+            }
+
+            doc.Add(new Paragraph(" "));
+            doc.Add(new Paragraph(
+                "Este comprobante fue generado automáticamente por el Sistema de Matrícula Académica de la Universidad Real Americana y es válido como constancia de matrícula y pago.",
+                fontPequena) { Alignment = Element.ALIGN_CENTER, SpacingBefore = 20 });
 
             doc.Close();
 
-            return File(ms.ToArray(), "application/pdf", "ComprobanteMatricula.pdf");
+            var nombreArchivo = "ComprobanteMatricula_" + estudiante.Nombre.Replace(" ", "_") + ".pdf";
+            return File(ms.ToArray(), "application/pdf", nombreArchivo);
         }
     }
 
@@ -278,6 +406,7 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         public string Codigo { get; set; } = "";
         public string Nombre { get; set; } = "";
         public int Creditos { get; set; }
+        public decimal Costo { get; set; }
         public string Modalidad { get; set; } = "";
         public string Sede { get; set; } = "";
         public string CarreraNombre { get; set; } = "";
@@ -294,6 +423,7 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         public string Nombre { get; set; } = "";
         public string Carrera { get; set; } = "";
         public int Creditos { get; set; }
+        public decimal Costo { get; set; }
         public string Estado { get; set; } = "";
         public DateTime Fecha { get; set; }
 
