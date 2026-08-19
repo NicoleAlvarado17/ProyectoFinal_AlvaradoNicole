@@ -92,6 +92,25 @@ namespace ProyectoFinal_AlvaradoNicole.Pages.Account
                         await _context.SaveChangesAsync();
                     }
                 }
+                // Si es docente → crear registro en tabla Docentes (el Panel Docente
+                // busca al profesor por correo, así que sin esto el nuevo usuario
+                // quedaría sin panel funcional)
+                else if (rol == "Docente")
+                {
+                    var yaExiste = await _context.Docentes.AnyAsync(d => d.Correo == user.Email);
+                    if (!yaExiste)
+                    {
+                        var docente = new Docente
+                        {
+                            Nombre = user.FullName,
+                            Correo = user.Email,
+                            Especialidad = "Por definir"
+                        };
+
+                        _context.Docentes.Add(docente);
+                        await _context.SaveChangesAsync();
+                    }
+                }
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
 
