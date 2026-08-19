@@ -56,7 +56,11 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             return estudiante;
         }
 
-        public async Task<IActionResult> Cursos()
+        private const int PageSizeCursos = 6;
+
+        // HU05/HU09 - catálogo de cursos disponibles, con paginación y filtros
+        // (créditos, modalidad, texto libre) resueltos vía AJAX en CursosParcial.
+        public async Task<IActionResult> Cursos(int page = 1, int? creditos = null, string? modalidad = null, string? busqueda = null)
         {
             var estudiante = await GetOrCreateEstudianteAsync();
             if (estudiante == null)
@@ -65,23 +69,73 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
                 return RedirectToAction("Dashboard", "Home");
             }
 
-            var cursos = await _context.Cursos.Include(c => c.Carrera).ToListAsync();
+            ViewBag.Modalidades = ProyectoFinal_AlvaradoNicole.Controllers.CursosAdminController.Modalidades;
+            ViewBag.CreditosSeleccionado = creditos;
+            ViewBag.ModalidadSeleccionada = modalidad;
+            ViewBag.Busqueda = busqueda;
+
+            var vm = await ObtenerCursosDisponiblesAsync(estudiante, page, creditos, modalidad, busqueda);
+            return View(vm);
+        }
+
+        // Devuelve solo el fragmento de tabla + paginación, para refrescar el
+        // catálogo mediante AJAX sin recargar la página completa.
+        [HttpGet]
+        public async Task<IActionResult> CursosParcial(int page = 1, int? creditos = null, string? modalidad = null, string? busqueda = null)
+        {
+            ViewBag.CreditosSeleccionado = creditos;
+            ViewBag.ModalidadSeleccionada = modalidad;
+            ViewBag.Busqueda = busqueda;
+
+            var estudiante = await GetOrCreateEstudianteAsync();
+            if (estudiante == null)
+            {
+                return PartialView("_CursosDisponiblesParcial", new PaginatedList<CursoDisponibleViewModel>(new List<CursoDisponibleViewModel>(), 0, 1, PageSizeCursos));
+            }
+
+            var vm = await ObtenerCursosDisponiblesAsync(estudiante, page, creditos, modalidad, busqueda);
+            return PartialView("_CursosDisponiblesParcial", vm);
+        }
+
+        private async Task<PaginatedList<CursoDisponibleViewModel>> ObtenerCursosDisponiblesAsync(
+            Estudiante estudiante, int page, int? creditos, string? modalidad, string? busqueda)
+        {
             var misMatriculas = await _context.Matriculas
                 .Where(m => m.EstudianteId == estudiante.Id)
                 .Select(m => m.CursoId)
                 .ToListAsync();
 
-            var vm = cursos.Select(c => new CursoDisponibleViewModel
+            var query = _context.Cursos
+                .Include(c => c.Carrera)
+                .Where(c => c.Estado == "Activo")
+                .AsQueryable();
+
+            if (creditos.HasValue)
+                query = query.Where(c => c.Creditos == creditos.Value);
+
+            if (!string.IsNullOrWhiteSpace(modalidad))
+                query = query.Where(c => c.Modalidad == modalidad);
+
+            if (!string.IsNullOrWhiteSpace(busqueda))
+                query = query.Where(c => c.Nombre.Contains(busqueda) || c.Codigo.Contains(busqueda));
+
+            query = query.OrderBy(c => c.Codigo);
+
+            var paginaCursos = await PaginatedList<Curso>.CreateAsync(query, page, PageSizeCursos);
+
+            var items = paginaCursos.Select(c => new CursoDisponibleViewModel
             {
                 Id = c.Id,
                 Codigo = c.Codigo,
                 Nombre = c.Nombre,
                 Creditos = c.Creditos,
+                Modalidad = c.Modalidad,
+                Sede = c.Sede,
                 CarreraNombre = c.Carrera != null ? c.Carrera.Nombre : "",
                 YaMatriculado = misMatriculas.Contains(c.Id)
             }).ToList();
 
-            return View(vm);
+            return new PaginatedList<CursoDisponibleViewModel>(items, paginaCursos.TotalCount, paginaCursos.PageIndex, PageSizeCursos);
         }
 
         [HttpPost]
@@ -224,6 +278,8 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         public string Codigo { get; set; } = "";
         public string Nombre { get; set; } = "";
         public int Creditos { get; set; }
+        public string Modalidad { get; set; } = "";
+        public string Sede { get; set; } = "";
         public string CarreraNombre { get; set; } = "";
         public bool YaMatriculado { get; set; }
     }
