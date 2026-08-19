@@ -14,6 +14,9 @@ namespace SistemaMatriculaURA.Models
         public string Sede { get; set; } = "";
         public string Horario { get; set; } = "";
 
+        // HU19 - Estado del curso: Activo, Inactivo o Cerrado.
+        public string Estado { get; set; } = "Activo";
+
 
         public int? DocenteId { get; set; }
 

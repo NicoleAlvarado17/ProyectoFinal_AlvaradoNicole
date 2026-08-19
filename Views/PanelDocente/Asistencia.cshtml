@@ -1,24 +1,109 @@
-@model IEnumerable<SistemaMatriculaURA.Models.Matricula>
+@model IEnumerable<ProyectoFinal_AlvaradoNicole.Controllers.AsistenciaEstudianteViewModel>
+@{
+    var curso = (SistemaMatriculaURA.Models.Curso)ViewBag.Curso;
+    var fecha = (DateTime)ViewBag.Fecha;
+}
 
-<h2>Asistencia – @ViewBag.Curso.Nombre</h2>
+<div class="container mt-4">
+    <h2>Asistencia &ndash; @curso.Nombre</h2>
+    <p class="text-muted">
+        Sesión del @fecha.ToString("dd/MM/yyyy") &middot; @curso.Sede &middot; @curso.Horario
+    </p>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Estudiante</th>
-            <th>Asistencia</th>
-        </tr>
-    </thead>
+    <form id="formAsistencia" class="mb-3 row g-2 align-items-end" method="get">
+        <div class="col-auto">
+            <label class="form-label">Fecha de la sesión</label>
+            <input type="date" id="fechaSesion" name="fecha" class="form-control"
+                   value="@fecha.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-auto">
+            <input type="hidden" id="cursoId" name="cursoId" value="@curso.Id" />
+            <button type="submit" class="btn btn-outline-secondary">Cambiar fecha</button>
+        </div>
+    </form>
 
-    <tbody>
-        @foreach (var m in Model)
-        {
-            <tr>
-                <td>@m.Estudiante.Nombre</td>
-                <td>
-                    <input type="checkbox" />
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    @Html.AntiForgeryToken()
+    <div id="mensajeAsistencia" class="alert d-none"></div>
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted">No hay estudiantes matriculados activos en este curso.</p>
+    }
+    else
+    {
+        <table class="table table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Estudiante</th>
+                    <th class="text-center" style="width: 120px;">Presente</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model)
+                {
+                    <tr>
+                        <td>@e.Nombre</td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input chk-presente"
+                                   data-estudiante-id="@e.EstudianteId" checked="@(e.Presente ? "checked" : null)" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button id="btnGuardarAsistencia" type="button" class="btn btn-success">Guardar asistencia</button>
+    }
+
+    <a asp-action="CargaAcademica" class="btn btn-link">&larr; Volver a carga académica</a>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('#btnGuardarAsistencia').on('click', function () {
+                var $btn = $(this);
+                var estudiantes = $('.chk-presente').map(function () {
+                    return {
+                        estudianteId: parseInt($(this).data('estudiante-id')),
+                        presente: $(this).is(':checked')
+                    };
+                }).get();
+
+                var payload = {
+                    cursoId: parseInt($('#cursoId').val()),
+                    fecha: $('#fechaSesion').val(),
+                    estudiantes: estudiantes
+                };
+
+                var token = $('input[name="__RequestVerificationToken"]').val();
+
+                $btn.prop('disabled', true).text('Guardando...');
+
+                $.ajax({
+                    url: '@Url.Action("GuardarAsistencia", "PanelDocente")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    headers: { 'RequestVerificationToken': token },
+                    data: JSON.stringify(payload),
+                    success: function (resp) {
+                        mostrarMensaje(resp.mensaje || 'Asistencia guardada correctamente.', true);
+                    },
+                    error: function () {
+                        mostrarMensaje('Ocurrió un error al guardar la asistencia.', false);
+                    },
+                    complete: function () {
+                        $btn.prop('disabled', false).text('Guardar asistencia');
+                    }
+                });
+            });
+
+            function mostrarMensaje(texto, ok) {
+                var $msg = $('#mensajeAsistencia');
+                $msg.removeClass('d-none alert-success alert-danger')
+                    .addClass(ok ? 'alert-success' : 'alert-danger')
+                    .text(texto);
+            }
+        });
+    </script>
+}

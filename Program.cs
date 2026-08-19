@@ -22,6 +22,14 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
+// Permite validar el antiforgery token enviado por cabecera en las peticiones
+// AJAX con cuerpo JSON (p. ej. PanelDocente/GuardarAsistencia), donde no existe
+// un formulario tradicional del que leer el campo __RequestVerificationToken.
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "RequestVerificationToken";
+});
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddControllersWithViews();
@@ -91,11 +99,39 @@ using (var scope = app.Services.CreateScope())
                 await userManager.AddToRoleAsync(adminUser, "Admin");
             }
         }
+
+        // Cuentas de demostración (los registros correspondientes en las tablas
+        // Estudiantes/Docentes ya existen vía HasData en ApplicationDbContext,
+        // enlazados por correo). Se crean aquí para que las credenciales publicadas
+        // en la documentación funcionen sin pasos manuales adicionales.
+        async Task CrearUsuarioDemoAsync(string email, string password, string fullName, string rol, string carrera)
+        {
+            var usuario = await userManager.FindByEmailAsync(email);
+            if (usuario != null) return;
+
+            usuario = new ApplicationUser
+            {
+                UserName = email,
+                Email = email,
+                EmailConfirmed = true,
+                FullName = fullName,
+                Carrera = carrera
+            };
+
+            var resultadoUsuario = await userManager.CreateAsync(usuario, password);
+            if (resultadoUsuario.Succeeded)
+            {
+                await userManager.AddToRoleAsync(usuario, rol);
+            }
+        }
+
+        await CrearUsuarioDemoAsync("estudiante1@ura.com", "Admin123.", "Nicole Vargas Solano", "Estudiante", "Ingeniería en Sistemas");
+        await CrearUsuarioDemoAsync("docente1@ura.com", "Admin123.", "Carlos Brenes Solano", "Docente", "N/A");
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Error creando roles/usuario Admin al iniciar la aplicación.");
+        logger.LogError(ex, "Error creando roles/usuarios de demostración al iniciar la aplicación.");
     }
 }
 
