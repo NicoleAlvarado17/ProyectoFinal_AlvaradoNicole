@@ -5,9 +5,6 @@ using SistemaMatriculaURA.Models;
 
 namespace ProyectoFinal_AlvaradoNicole.Controllers
 {
-    // Panel de administración: pantalla de aterrizaje del rol Admin al iniciar
-    // sesión, con el resumen general del sistema y accesos directos a los
-    // módulos de gestión (igual que el prototipo de diseño, Pantalla 11).
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
