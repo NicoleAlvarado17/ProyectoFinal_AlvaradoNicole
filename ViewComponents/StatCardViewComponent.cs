@@ -2,10 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ProyectoFinal_AlvaradoNicole.ViewComponents
 {
-    // Widget reutilizable para las tarjetas de estadísticas de los dashboards
-    // (Estudiante, Docente, Administrador). Uso:
-    //   @await Component.InvokeAsync("StatCard", new { label = "Cursos activos",
-    //       value = "6", subtitle = "este cuatrimestre" })
     public class StatCardViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke(string label, string value, string? subtitle = null, string? icon = null)
@@ -27,9 +23,6 @@ namespace ProyectoFinal_AlvaradoNicole.ViewComponents
         public string Label { get; set; } = "";
         public string Value { get; set; } = "";
         public string? Subtitle { get; set; }
-
-        // Iniciales opcionales para el círculo insignia de la tarjeta
-        // (p. ej. "ES" para Estudiantes), como en el prototipo de diseño.
         public string? Icon { get; set; }
     }
 }

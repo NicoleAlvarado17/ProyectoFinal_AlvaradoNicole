@@ -2,9 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ProyectoFinal_AlvaradoNicole.ViewComponents
 {
-    // Widget reutilizable de paginación. Se invoca desde cualquier vista con:
-    //   @await Component.InvokeAsync("Pagination", new { pageIndex = Model.PageIndex,
-    //       totalPages = Model.TotalPages, action = "Index", routeValues = new { ... } })
     public class PaginationViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke(int pageIndex, int totalPages, string action, object? routeValues = null)

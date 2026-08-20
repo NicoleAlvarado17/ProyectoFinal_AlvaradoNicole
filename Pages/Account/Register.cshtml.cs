@@ -63,15 +63,12 @@ namespace ProyectoFinal_AlvaradoNicole.Pages.Account
 
             if (result.Succeeded)
             {
-                // Determinar rol automáticamente
                 var localPart = Input.Email.Split('@')[0].ToLowerInvariant();
                 var rol = (localPart.StartsWith("docente") || localPart.StartsWith("profesor"))
                     ? "Docente"
                     : "Estudiante";
 
                 await _userManager.AddToRoleAsync(user, rol);
-
-                // Si es estudiante → crear registro en tabla Estudiantes
                 if (rol == "Estudiante")
                 {
                     var carrera = await _context.Carreras
@@ -92,9 +89,6 @@ namespace ProyectoFinal_AlvaradoNicole.Pages.Account
                         await _context.SaveChangesAsync();
                     }
                 }
-                // Si es docente → crear registro en tabla Docentes (el Panel Docente
-                // busca al profesor por correo, así que sin esto el nuevo usuario
-                // quedaría sin panel funcional)
                 else if (rol == "Docente")
                 {
                     var yaExiste = await _context.Docentes.AnyAsync(d => d.Correo == user.Email);
