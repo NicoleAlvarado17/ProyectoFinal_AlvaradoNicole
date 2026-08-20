@@ -14,8 +14,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         {
             _context = context;
         }
-
-        // AUDITORÍA GENERAL
         public async Task<IActionResult> Auditoria(int? estudianteId, int? cursoId, string estado)
         {
             var query = _context.Matriculas
@@ -23,8 +21,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
                 .Include(m => m.Curso)
                 .ThenInclude(c => c.Carrera)
                 .AsQueryable();
-
-            // FILTROS
             if (estudianteId.HasValue)
                 query = query.Where(m => m.EstudianteId == estudianteId.Value);
 
@@ -33,16 +29,12 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             if (!string.IsNullOrEmpty(estado))
                 query = query.Where(m => m.Estado == estado);
-
-            // SELECTS
             ViewBag.Estudiantes = _context.Estudiantes.OrderBy(e => e.Nombre).ToList();
             ViewBag.Cursos = _context.Cursos.OrderBy(c => c.Nombre).ToList();
             ViewBag.Estados = new List<string> { "Activa", "Congelada", "Retirada" };
 
             return View(await query.ToListAsync());
         }
-
-        // DETALLES DE UNA MATRÍCULA
         public async Task<IActionResult> Details(int id)
         {
             var matricula = await _context.Matriculas

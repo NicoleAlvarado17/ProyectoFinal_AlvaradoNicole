@@ -14,8 +14,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         {
             _context = context;
         }
-
-        // Abreviaturas de día usadas en el campo Curso.Horario (ej. "Lun/Mié 18:00-20:00").
         private static readonly Dictionary<DayOfWeek, string> AbreviaturasDia = new()
         {
             { DayOfWeek.Monday, "Lun" },
@@ -37,24 +35,17 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             { DayOfWeek.Saturday, "sábado" },
             { DayOfWeek.Sunday, "domingo" }
         };
-
-        // El campo Horario tiene el formato "Día[/Día2] HH:mm-HH:mm" (ej. "Lun/Mié 18:00-20:00"
-        // o "Vie 08:00-12:00"). Esta función revisa si alguno de los días listados es "hoy".
         private static bool SesionEsHoy(string horario, string abreviaturaHoy)
         {
             if (string.IsNullOrWhiteSpace(horario)) return false;
             var dias = horario.Split(' ')[0].Split('/');
             return dias.Any(d => d.Equals(abreviaturaHoy, StringComparison.OrdinalIgnoreCase));
         }
-
-        // Extrae solo el rango de horas (ej. "18:00-20:00") del campo Horario.
         private static string ExtraerHora(string horario)
         {
             var partes = horario.Split(' ', 2);
             return partes.Length > 1 ? partes[1] : horario;
         }
-
-        // DASHBOARD
         public async Task<IActionResult> DashboardDocente()
         {
             string correo = User.Identity.Name;
@@ -95,8 +86,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             return View(docente);
         }
-
-        // HU12 – CARGA ACADÉMICA
         public async Task<IActionResult> CargaAcademica()
         {
             string correo = User.Identity.Name;
@@ -113,8 +102,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             return View(cursos);
         }
-
-        // HU13 – LISTA DE CLASE
         public async Task<IActionResult> ListaClase(int cursoId)
         {
             var matriculas = await _context.Matriculas
@@ -128,8 +115,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             return View(matriculas);
         }
-
-        // HU14 – CONTROL DE ASISTENCIA
         public async Task<IActionResult> Asistencia(int cursoId, DateTime? fecha)
         {
             var curso = await _context.Cursos.FindAsync(cursoId);
@@ -162,8 +147,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             return View(vm);
         }
-
-        // Guarda la asistencia de la sesión mediante AJAX (sin recargar la página).
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GuardarAsistencia([FromBody] GuardarAsistenciaRequest request)
@@ -213,8 +196,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         public string Nombre { get; set; } = "";
         public bool Presente { get; set; }
     }
-
-    // HU12 - Una sesión de clase de hoy en el Dashboard Docente (materia, grupo y aula).
     public class SesionHoyViewModel
     {
         public string Hora { get; set; } = "";

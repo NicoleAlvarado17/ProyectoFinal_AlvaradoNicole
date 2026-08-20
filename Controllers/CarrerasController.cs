@@ -13,8 +13,6 @@ public class CarrerasController : Controller
     {
         _context = context;
     }
-
-    // GET: CARRERAS
     [AllowAnonymous]
     public async Task<IActionResult> Index(int page = 1)
     {
@@ -24,11 +22,6 @@ public class CarrerasController : Controller
     }
 
     private const int PageSizePlanEstudios = 5;
-
-    // GET: CARRERAS/PlanEstudios/5 - página pública con el plan de estudios
-    // (los cursos activos) de una carrera específica. Es lo que se muestra al
-    // dar clic en "Ver más" desde las tarjetas de carreras en la página de inicio.
-    // Paginado: cada carrera tiene 10 cursos, así que se muestran de 5 en 5.
     [AllowAnonymous]
     public async Task<IActionResult> PlanEstudios(int? id, int page = 1)
     {
@@ -54,8 +47,6 @@ public class CarrerasController : Controller
         ViewBag.Carrera = carrera;
         return View(cursos);
     }
-
-    // GET: CARRERAS/Details
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -72,15 +63,11 @@ public class CarrerasController : Controller
 
         return View(carrera);
     }
-
-    // GET: CARRERAS/Create
     [Authorize(Roles = "Admin")]
     public IActionResult Create()
     {
         return View();
     }
-
-    // POST: CARRERAS/Create
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -95,8 +82,6 @@ public class CarrerasController : Controller
         }
         return View(carrera);
     }
-
-    // GET: CARRERAS/Edit
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(int? id)
     {
@@ -112,8 +97,6 @@ public class CarrerasController : Controller
         }
         return View(carrera);
     }
-
-    // POST: CARRERAS/Edit
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -147,8 +130,6 @@ public class CarrerasController : Controller
         }
         return View(carrera);
     }
-
-    // GET: CARRERAS/Delete
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int? id)
     {
@@ -166,8 +147,6 @@ public class CarrerasController : Controller
 
         return View(carrera);
     }
-
-    // POST: CARRERAS/Delete
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin")]

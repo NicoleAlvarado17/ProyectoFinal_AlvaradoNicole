@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -7,10 +7,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProyectoFinal_AlvaradoNicole.Migrations
 {
-    /// <inheritdoc />
     public partial class AgregaHistorialAcademicoYHorarios : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
@@ -514,8 +512,6 @@ namespace ProyectoFinal_AlvaradoNicole.Migrations
                     { 9003, "Completado", new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 9003, "Tarjeta de crédito", 135000m, "TXN-00009003" }
                 });
         }
-
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(
