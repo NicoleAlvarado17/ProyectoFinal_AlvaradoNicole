@@ -1,4 +1,4 @@
-@model IEnumerable<SistemaMatriculaURA.Models.Curso>
+@model SistemaMatriculaURA.Models.PaginatedList<SistemaMatriculaURA.Models.Curso>
 @{
     var carrera = (SistemaMatriculaURA.Models.Carrera)ViewBag.Carrera;
     ViewData["Title"] = "Plan de Estudios - " + carrera.Nombre;
@@ -48,10 +48,20 @@ else
     </table>
 
     <p class="text-muted">
-        Total de créditos del plan: <strong>@Model.Sum(c => c.Creditos)</strong>
+        @Model.TotalCount curso(s) en el plan de estudios
         &nbsp;&middot;&nbsp;
-        Costo total del plan: <strong>&#8353;@Model.Sum(c => c.Costo).ToString("N0")</strong>
+        Total de créditos (esta página): <strong>@Model.Sum(c => c.Creditos)</strong>
+        &nbsp;&middot;&nbsp;
+        Costo (esta página): <strong>&#8353;@Model.Sum(c => c.Costo).ToString("N0")</strong>
     </p>
+
+    @await Component.InvokeAsync("Pagination", new
+    {
+        pageIndex = Model.PageIndex,
+        totalPages = Model.TotalPages,
+        action = "PlanEstudios",
+        routeValues = new { id = carrera.Id }
+    })
 }
 
 <a asp-page="/Account/Register" class="btn btn-warning">Matricularme en esta carrera</a>

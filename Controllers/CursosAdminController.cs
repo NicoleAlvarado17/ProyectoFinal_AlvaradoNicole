@@ -15,7 +15,7 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
         public static readonly string[] Modalidades = { "Presencial", "Virtual", "Híbrido" };
         public static readonly string[] Sedes = { "San José", "Heredia", "Alajuela", "Online" };
-        public static readonly string[] Estados = { "Activo", "Inactivo", "Cerrado" };
+        public static readonly string[] Estados = { "Activo", "Congelado", "Inactivo", "Cerrado" };
 
         public CursosAdminController(ApplicationDbContext context)
         {
@@ -143,6 +143,41 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
                 _context.Cursos.Remove(curso);
                 await _context.SaveChangesAsync();
                 TempData["Success"] = "Curso eliminado.";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Acción rápida desde Gestión de Cursos: congela el curso (deja de
+        // aparecer en el plan de estudios público y en el catálogo del
+        // estudiante, sin necesidad de eliminarlo) sin pasar por el formulario
+        // completo de Editar.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Congelar(int id)
+        {
+            var curso = await _context.Cursos.FindAsync(id);
+            if (curso != null)
+            {
+                curso.Estado = "Congelado";
+                await _context.SaveChangesAsync();
+                TempData["Success"] = $"Curso {curso.Codigo} congelado correctamente.";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Revierte un curso congelado (u otro estado) a Activo.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reactivar(int id)
+        {
+            var curso = await _context.Cursos.FindAsync(id);
+            if (curso != null)
+            {
+                curso.Estado = "Activo";
+                await _context.SaveChangesAsync();
+                TempData["Success"] = $"Curso {curso.Codigo} reactivado correctamente.";
             }
 
             return RedirectToAction(nameof(Index));

@@ -23,11 +23,14 @@ public class CarrerasController : Controller
         return View(carreras);
     }
 
+    private const int PageSizePlanEstudios = 5;
+
     // GET: CARRERAS/PlanEstudios/5 - página pública con el plan de estudios
     // (los cursos activos) de una carrera específica. Es lo que se muestra al
     // dar clic en "Ver más" desde las tarjetas de carreras en la página de inicio.
+    // Paginado: cada carrera tiene 10 cursos, así que se muestran de 5 en 5.
     [AllowAnonymous]
-    public async Task<IActionResult> PlanEstudios(int? id)
+    public async Task<IActionResult> PlanEstudios(int? id, int page = 1)
     {
         if (id == null)
         {
@@ -40,11 +43,13 @@ public class CarrerasController : Controller
             return NotFound();
         }
 
-        var cursos = await _context.Cursos
+        var query = _context.Cursos
             .Include(c => c.Docente)
             .Where(c => c.CarreraId == id && c.Estado == "Activo")
             .OrderBy(c => c.Nombre)
-            .ToListAsync();
+            .AsQueryable();
+
+        var cursos = await PaginatedList<Curso>.CreateAsync(query, page, PageSizePlanEstudios);
 
         ViewBag.Carrera = carrera;
         return View(cursos);

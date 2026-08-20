@@ -12,6 +12,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
+
+    // Se quita el requisito de carácter especial para que la contraseña de
+    // las cuentas de demostración (Admin123) sea válida tal como se pidió.
+    options.Password.RequireNonAlphanumeric = false;
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -78,7 +82,7 @@ using (var scope = app.Services.CreateScope())
         }
 
         // Crear usuario Admin
-        var adminEmail = "admin@sistema.com";
+        var adminEmail = "admin@ura.com";
         var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
         if (adminUser == null)
@@ -92,7 +96,7 @@ using (var scope = app.Services.CreateScope())
                 Carrera = "N/A"
             };
 
-            var result = await userManager.CreateAsync(adminUser, "Admin123!");
+            var result = await userManager.CreateAsync(adminUser, "Admin123");
 
             if (result.Succeeded)
             {

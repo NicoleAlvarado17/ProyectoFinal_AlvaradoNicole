@@ -98,13 +98,25 @@
                 <td>
                     @await Component.InvokeAsync("EstadoBadge", new { estado = c.Estado })
                 </td>
-                <td>
+                <td class="text-nowrap">
                     <a asp-controller="CursosAdmin" asp-action="Edit" asp-route-id="@c.Id" class="btn btn-warning btn-sm">Editar</a>
 
-<a asp-controller="CursosAdmin" asp-action="Details" asp-route-id="@c.Id" class="btn btn-info btn-sm">Detalles</a>
+                    <a asp-controller="CursosAdmin" asp-action="Details" asp-route-id="@c.Id" class="btn btn-info btn-sm">Detalles</a>
 
-<a asp-controller="CursosAdmin" asp-action="Delete" asp-route-id="@c.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                    @if (c.Estado == "Congelado")
+                    {
+                        <form asp-action="Reactivar" asp-route-id="@c.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-success btn-sm">Reactivar</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="Congelar" asp-route-id="@c.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-secondary btn-sm">Congelar</button>
+                        </form>
+                    }
 
+                    <a asp-controller="CursosAdmin" asp-action="Delete" asp-route-id="@c.Id" class="btn btn-danger btn-sm">Eliminar</a>
                 </td>
             </tr>
         }
