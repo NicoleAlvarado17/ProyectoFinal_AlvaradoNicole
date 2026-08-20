@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -6,10 +6,8 @@
 
 namespace ProyectoFinal_AlvaradoNicole.Migrations
 {
-    /// <inheritdoc />
     public partial class CompletaPlanDeEstudios10PorCarrera : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.InsertData(
@@ -50,8 +48,6 @@ namespace ProyectoFinal_AlvaradoNicole.Migrations
                     { 60, 6, "CO-420", 180000m, 4, null, "Activo", "Sáb 09:00-13:00", "Híbrido", "Auditoría Avanzada", "Heredia" }
                 });
         }
-
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(

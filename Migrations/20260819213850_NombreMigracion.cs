@@ -5,10 +5,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProyectoFinal_AlvaradoNicole.Migrations
 {
-    /// <inheritdoc />
     public partial class NombreMigracion : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
@@ -45,10 +43,6 @@ namespace ProyectoFinal_AlvaradoNicole.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            // NOTA: el Docente debe insertarse ANTES de asignarlo como DocenteId en Cursos,
-            // de lo contrario la restricción FK_Cursos_Docentes_DocenteId falla (bug de orden
-            // en el scaffolding original de esta migración).
             migrationBuilder.InsertData(
                 table: "Docentes",
                 columns: new[] { "Id", "Correo", "Especialidad", "Nombre" },
@@ -96,8 +90,6 @@ namespace ProyectoFinal_AlvaradoNicole.Migrations
                 table: "Asistencias",
                 column: "EstudianteId");
         }
-
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -116,9 +108,6 @@ namespace ProyectoFinal_AlvaradoNicole.Migrations
             migrationBuilder.DropColumn(
                 name: "Estado",
                 table: "Cursos");
-
-            // NOTA: hay que limpiar el DocenteId de Cursos ANTES de borrar el Docente,
-            // de lo contrario la restricción FK_Cursos_Docentes_DocenteId falla.
             migrationBuilder.UpdateData(
                 table: "Cursos",
                 keyColumn: "Id",
