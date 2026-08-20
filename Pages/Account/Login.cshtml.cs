@@ -46,8 +46,6 @@ namespace ProyectoFinal_AlvaradoNicole.Pages.Account
                     if (await _userManager.IsInRoleAsync(user, "Estudiante"))
                         return LocalRedirect("/Home/Dashboard");
                 }
-
-                // Fallback si el usuario no tiene rol asignado
                 return LocalRedirect("/Home/Dashboard");
             }
 
