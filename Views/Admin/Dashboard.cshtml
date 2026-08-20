@@ -1,0 +1,36 @@
+@model ProyectoFinal_AlvaradoNicole.Controllers.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Panel de Administración";
+}
+
+<h1 class="section-title">Panel de Administración</h1>
+<p class="text-muted mb-4">Resumen general del sistema académico</p>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-4 col-lg">
+        @await Component.InvokeAsync("StatCard", new { icon = "ES", label = "Estudiantes", value = Model.TotalEstudiantes.ToString("N0") })
+    </div>
+    <div class="col-6 col-md-4 col-lg">
+        @await Component.InvokeAsync("StatCard", new { icon = "PR", label = "Profesores", value = Model.TotalProfesores.ToString("N0") })
+    </div>
+    <div class="col-6 col-md-4 col-lg">
+        @await Component.InvokeAsync("StatCard", new { icon = "CA", label = "Carreras", value = Model.TotalCarreras.ToString("N0") })
+    </div>
+    <div class="col-6 col-md-4 col-lg">
+        @await Component.InvokeAsync("StatCard", new { icon = "CU", label = "Cursos", value = Model.TotalCursos.ToString("N0") })
+    </div>
+    <div class="col-6 col-md-4 col-lg">
+        @await Component.InvokeAsync("StatCard", new { icon = "MA", label = "Matrículas activas", value = Model.MatriculasActivas.ToString("N0") })
+    </div>
+</div>
+
+<div class="ura-box" style="width:auto;">
+    <h4 class="mb-3">Acciones rápidas</h4>
+    <div class="d-flex flex-wrap gap-2">
+        <a asp-controller="EstudiantesAdmin" asp-action="Create" class="btn btn-warning">+ Crear nuevo estudiante</a>
+        <a asp-controller="Docentes" asp-action="Create" class="btn btn-warning">+ Crear nuevo profesor</a>
+        <a asp-controller="Carreras" asp-action="Create" class="btn btn-warning">+ Crear nueva carrera</a>
+        <a asp-controller="CursosAdmin" asp-action="Create" class="btn btn-warning">+ Crear nuevo curso</a>
+    </div>
+    <p class="text-muted mt-3 mb-0" style="font-size:.9rem;">Acceso directo a los módulos de gestión del sistema.</p>
+</div>

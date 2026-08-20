@@ -8,13 +8,14 @@ namespace ProyectoFinal_AlvaradoNicole.ViewComponents
     //       value = "6", subtitle = "este cuatrimestre" })
     public class StatCardViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(string label, string value, string? subtitle = null)
+        public IViewComponentResult Invoke(string label, string value, string? subtitle = null, string? icon = null)
         {
             var vm = new StatCardViewModel
             {
                 Label = label,
                 Value = value,
-                Subtitle = subtitle
+                Subtitle = subtitle,
+                Icon = icon
             };
 
             return View(vm);
@@ -26,5 +27,9 @@ namespace ProyectoFinal_AlvaradoNicole.ViewComponents
         public string Label { get; set; } = "";
         public string Value { get; set; } = "";
         public string? Subtitle { get; set; }
+
+        // Iniciales opcionales para el círculo insignia de la tarjeta
+        // (p. ej. "ES" para Estudiantes), como en el prototipo de diseño.
+        public string? Icon { get; set; }
     }
 }

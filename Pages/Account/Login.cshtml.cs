@@ -38,7 +38,7 @@ namespace ProyectoFinal_AlvaradoNicole.Pages.Account
                 if (user != null)
                 {
                     if (await _userManager.IsInRoleAsync(user, "Admin"))
-                        return LocalRedirect("/Carreras");
+                        return LocalRedirect("/Admin/Dashboard");
 
                     if (await _userManager.IsInRoleAsync(user, "Docente"))
                         return LocalRedirect("/PanelDocente/DashboardDocente");

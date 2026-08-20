@@ -11,9 +11,8 @@
         </p>
 
         <div class="hero-buttons">
-            <!-- BOTONES CORREGIDOS -->
-            <a asp-page="/Account/Login" class="btn btn-primary btn-lg me-3">Ingresar</a>
-            <a asp-page="/Account/Register" class="btn btn-warning btn-lg">Registrarse</a>
+            <a asp-page="/Account/Login" class="btn btn-warning btn-lg me-3">Ingresar</a>
+            <a asp-page="/Account/Register" class="btn btn-primary btn-lg">Registrarse</a>
         </div>
     </div>
 
@@ -28,7 +27,10 @@
 
 <hr class="section-divider" />
 
-<h2 class="section-title">Carreras Destacadas</h2>
+<div class="d-flex justify-content-between align-items-center">
+    <h2 class="section-title mb-0">Carreras Destacadas</h2>
+    <a asp-controller="Carreras" asp-action="Index" class="ura-link">Ver todas &rarr;</a>
+</div>
 
 <div class="row mt-4">
     @if (!Model.Any())
@@ -42,8 +44,9 @@
             <div class="col-md-4 mb-3">
                 <div class="card carrera-card shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title">@carrera.Nombre (@carrera.Codigo)</h5>
-                        <a class="btn btn-primary" asp-controller="Carreras" asp-action="PlanEstudios" asp-route-id="@carrera.Id">Ver más</a>
+                        <div class="carrera-badge">@carrera.Nombre.Substring(0, Math.Min(2, carrera.Nombre.Length)).ToUpper()</div>
+                        <h5 class="card-title">@carrera.Nombre</h5>
+                        <a class="btn btn-primary btn-sm" asp-controller="Carreras" asp-action="PlanEstudios" asp-route-id="@carrera.Id">Ver más</a>
                     </div>
                 </div>
             </div>

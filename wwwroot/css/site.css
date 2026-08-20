@@ -16,7 +16,7 @@ html {
 
 body {
     margin-bottom: 60px;
-    background-color: #f5f5f5;
+    background-color: #F8F9FA;
 }
 
 .btn:focus,
@@ -29,12 +29,16 @@ body {
 
 /* ============================
    URA Colors
+   (paleta del prototipo de diseño: azules y dorados)
    ============================ */
 
 :root {
-    --ura-blue: #002b5c;
-    --ura-blue-dark: #003366;
-    --ura-gold: #c9a635;
+    --ura-blue: #1A365D;       /* azul oscuro institucional */
+    --ura-blue-dark: #1A365D;
+    --ura-blue-light: #2B6CB0; /* azul medio: botones primarios / enlaces */
+    --ura-gold: #D69E2E;       /* dorado: acentos y llamadas a la acción */
+    --ura-gold-light: #ECC94B;
+    --ura-bg: #F8F9FA;
 }
 
 /* ============================
@@ -47,29 +51,39 @@ h1, h2, h3 {
 
 /* ============================
    Buttons
+   (azul = acción principal/navegación, dorado = crear/destacar)
    ============================ */
 
 .btn-primary {
-    background-color: var(--ura-gold);
-    border-color: var(--ura-gold);
-    color: #000;
+    background-color: var(--ura-blue-light);
+    border-color: var(--ura-blue-light);
+    color: #fff;
     font-weight: 700;
 }
 
-.btn-danger {
-    background-color: var(--ura-blue);
-    border-color: var(--ura-blue);
-}
+    .btn-primary:hover,
+    .btn-primary:focus {
+        background-color: #235a94;
+        border-color: #235a94;
+        color: #fff;
+    }
 
 .btn-warning {
     background-color: var(--ura-gold);
     border-color: var(--ura-gold);
-    color: #000;
+    color: #1A365D;
     font-weight: 700;
 }
 
+    .btn-warning:hover,
+    .btn-warning:focus {
+        background-color: #c28e26;
+        border-color: #c28e26;
+        color: #1A365D;
+    }
+
 /* ============================
-   Navbar & Footer
+   Navbar & Header & Footer
    ============================ */
 
 .navbar {
@@ -77,14 +91,98 @@ h1, h2, h3 {
 }
 
 .ura-header {
-    background-color: var(--ura-blue-dark);
+    background-color: var(--ura-blue);
     border-bottom: 5px solid var(--ura-gold);
 }
 
 .ura-footer {
-    background-color: var(--ura-blue-dark);
+    background-color: var(--ura-blue);
     color: white;
     border-top: 5px solid var(--ura-gold);
+}
+
+/* ============================
+   Panel lateral (sidebar) de navegación
+   Reemplaza el menú horizontal por uno lateral fijo, como en el
+   prototipo de diseño, para las vistas de Admin/Docente/Estudiante.
+   ============================ */
+
+.ura-layout {
+    display: flex;
+    align-items: flex-start;
+}
+
+.ura-sidebar {
+    width: 240px;
+    flex: 0 0 240px;
+    background-color: var(--ura-blue);
+    min-height: calc(100vh - 220px);
+    padding: 1rem 0;
+}
+
+    .ura-sidebar .ura-sidebar-title {
+        color: var(--ura-gold);
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: .08em;
+        font-weight: 700;
+        padding: 0 1.25rem .75rem 1.25rem;
+        margin-bottom: .25rem;
+        border-bottom: 1px solid rgba(255,255,255,.15);
+    }
+
+    .ura-sidebar .nav-link {
+        color: rgba(255,255,255,.85);
+        padding: .65rem 1.25rem;
+        border-radius: 0;
+        font-size: .95rem;
+    }
+
+        .ura-sidebar .nav-link:hover {
+            color: #fff;
+            background-color: rgba(255,255,255,.08);
+        }
+
+        .ura-sidebar .nav-link.active {
+            background-color: var(--ura-gold);
+            color: var(--ura-blue);
+            font-weight: 700;
+        }
+
+.ura-content {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .ura-layout {
+        flex-direction: column;
+    }
+
+    .ura-sidebar {
+        width: 100%;
+        flex-basis: auto;
+        min-height: auto;
+    }
+}
+
+/* ============================
+   Tablas
+   Encabezado azul oscuro con texto blanco, como en el prototipo.
+   ============================ */
+
+.table thead th,
+.table > :not(caption) > * > th {
+    background-color: var(--ura-blue);
+    color: #fff;
+    border-color: var(--ura-blue);
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.table {
+    background-color: #fff;
 }
 
 /* ============================
@@ -92,7 +190,7 @@ h1, h2, h3 {
    ============================ */
 
 .hero-section {
-    background: linear-gradient(135deg, #002b5c, #004b8c);
+    background: linear-gradient(135deg, var(--ura-blue), #204a7a);
     color: white;
     padding: 60px 40px;
     border-radius: 12px;
@@ -100,6 +198,8 @@ h1, h2, h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
 }
 
 .hero-title {
@@ -118,21 +218,18 @@ h1, h2, h3 {
     margin-top: 20px;
 }
 
-.hero-buttons .btn-primary,
-.hero-buttons .btn-warning {
-    background-color: var(--ura-gold);
-    border-color: var(--ura-gold);
-    color: #000;
-    font-weight: 700;
-}
-
 .promo-box {
-    background: var(--ura-gold);
+    background: #fff;
     color: var(--ura-blue);
     padding: 25px;
     border-radius: 12px;
     width: 300px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.promo-title {
+    color: var(--ura-blue);
+    font-weight: 700;
 }
 
 /* ============================
@@ -146,13 +243,30 @@ h1, h2, h3 {
 }
 
 .carrera-card {
-    border-left: 5px solid var(--ura-gold);
+    border: 1px solid #e9ecef;
+    border-top: 4px solid var(--ura-gold);
+    text-align: center;
+}
+
+.carrera-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--ura-gold);
+    color: var(--ura-blue);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: .5rem;
 }
 
 .contact-section {
-    background: #f7f7f7;
+    background: #fff;
     padding: 30px;
     border-radius: 12px;
+    border-top: 4px solid var(--ura-gold);
 }
 
 .footer {
@@ -161,6 +275,18 @@ h1, h2, h3 {
     color: white;
     border-radius: 12px;
 }
+
+/* ============================
+   Tarjetas de estadísticas (dashboards)
+   ============================ */
+
+.stat-card {
+    border-top: 4px solid var(--ura-gold);
+}
+
+    .stat-card.stat-card-alt {
+        border-top-color: var(--ura-blue-light);
+    }
 
 /* ============================
    URA Institutional Forms
@@ -189,7 +315,7 @@ h1, h2, h3 {
 .ura-title {
     text-align: center;
     font-weight: bold;
-    color: var(--ura-blue-dark);
+    color: var(--ura-blue);
     margin-bottom: 10px;
 }
 
@@ -199,7 +325,7 @@ h1, h2, h3 {
 }
 
 .btn-ura {
-    background-color: var(--ura-blue-dark);
+    background-color: var(--ura-blue);
     color: white;
     font-weight: bold;
     border-radius: 8px;
@@ -208,11 +334,11 @@ h1, h2, h3 {
 }
 
     .btn-ura:hover {
-        background-color: #002244;
+        background-color: #12294a;
     }
 
 .ura-link {
-    color: var(--ura-gold);
+    color: var(--ura-blue-light);
     font-weight: bold;
     text-decoration: none;
 }

@@ -1,4 +1,4 @@
-﻿@{
+@{
     // Si una cuenta llegara a tener más de un rol asignado (por ejemplo, un
     // Admin que además quedó con el rol Estudiante de una prueba anterior),
     // se muestra un solo panel de navegación, con esta prioridad, para no
@@ -6,6 +6,17 @@
     var esAdmin = User.IsInRole("Admin");
     var esDocente = !esAdmin && User.IsInRole("Docente");
     var esEstudiante = !esAdmin && !esDocente && User.IsInRole("Estudiante");
+
+    var esInicio = ViewContext.RouteData.Values["controller"]?.ToString() == "Home" &&
+                   ViewContext.RouteData.Values["action"]?.ToString() == "Index";
+
+    var controllerActual = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var accionActual = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+
+    string ClaseActiva(string controlador) => controllerActual == controlador ? "active" : "";
+    string ClaseActivaHome(string accion) => (controllerActual == "Home" && accionActual == accion) ? "active" : "";
+
+    var mostrarSidebar = (esAdmin || esDocente || esEstudiante) && !esInicio;
 }
 <!DOCTYPE html>
 <html lang="es">
@@ -18,7 +29,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 
-<body style="background-color:#f5f5f5;">
+<body style="background-color:#F8F9FA;">
 
     <header class="ura-header">
     <div class="container d-flex align-items-center justify-content-between py-3">
@@ -28,9 +39,7 @@
             <h2 class="text-white fw-bold mb-0">Universidad Real Americana</h2>
         </div>
 
-        @if (User.Identity != null && User.Identity.IsAuthenticated &&
-             !(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" &&
-               ViewContext.RouteData.Values["action"]?.ToString() == "Index"))
+        @if (User.Identity != null && User.Identity.IsAuthenticated && !esInicio)
         {
             <div class="d-flex align-items-center gap-2">
                 <a href="/" class="btn btn-warning btn-sm">Salir</a>
@@ -41,146 +50,76 @@
     </div>
 </header>
 
+    <div class="ura-layout">
 
-    @* MENÚ DEL ADMIN *@
-    @if (esAdmin &&
-        !(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" &&
-          ViewContext.RouteData.Values["action"]?.ToString() == "Index"))
-    {
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
-            <div class="container">
-                <a class="navbar-brand fw-bold">Panel Administrativo</a>
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar"
-                        aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="adminNavbar">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
+        @if (mostrarSidebar)
+        {
+            <aside class="ura-sidebar">
+                @if (esAdmin)
+                {
+                    <div class="ura-sidebar-title">Panel Administrativo</div>
+                    <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="EstudiantesAdmin" asp-action="Index">
-                                Gestión de Estudiantes
-                            </a>
+                            <a class="nav-link @ClaseActiva("Admin")" asp-controller="Admin" asp-action="Dashboard">Dashboard</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Docentes" asp-action="Index">
-                                Gestión de Profesores
-                            </a>
+                            <a class="nav-link @ClaseActiva("EstudiantesAdmin")" asp-controller="EstudiantesAdmin" asp-action="Index">Gestión de Estudiantes</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Carreras" asp-action="Index">
-                                Gestión de Carreras
-                            </a>
+                            <a class="nav-link @ClaseActiva("Docentes")" asp-controller="Docentes" asp-action="Index">Gestión de Profesores</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="CursosAdmin" asp-action="Index">
-                                Gestión de Cursos
-                            </a>
+                            <a class="nav-link @ClaseActiva("Carreras")" asp-controller="Carreras" asp-action="Index">Gestión de Carreras</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Matriculas" asp-action="Auditoria">
-                                Auditoría de Matrículas
-                            </a>
+                            <a class="nav-link @ClaseActiva("CursosAdmin")" asp-controller="CursosAdmin" asp-action="Index">Gestión de Cursos</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Usuarios" asp-action="Index">
-                                Gestión de Usuarios
-                            </a>
+                            <a class="nav-link @ClaseActiva("Matriculas")" asp-controller="Matriculas" asp-action="Auditoria">Auditoría de Matrículas</a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link @ClaseActiva("Usuarios")" asp-controller="Usuarios" asp-action="Index">Gestión de Usuarios</a>
+                        </li>
                     </ul>
-                </div>
-            </div>
-        </nav>
-    }
-
-    @* MENÚ DEL DOCENTE *@
-    @if (esDocente &&
-        !(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" &&
-          ViewContext.RouteData.Values["action"]?.ToString() == "Index"))
-    {
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
-            <div class="container">
-                <a class="navbar-brand fw-bold" asp-controller="PanelDocente" asp-action="DashboardDocente">Panel Docente</a>
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#docenteNavbar"
-                        aria-controls="docenteNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="docenteNavbar">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
+                }
+                else if (esDocente)
+                {
+                    <div class="ura-sidebar-title">Panel Docente</div>
+                    <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="PanelDocente" asp-action="DashboardDocente">
-                                Dashboard
-                            </a>
+                            <a class="nav-link @ClaseActiva("PanelDocente")" asp-controller="PanelDocente" asp-action="DashboardDocente">Dashboard</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="PanelDocente" asp-action="CargaAcademica">
-                                Carga Académica
-                            </a>
+                            <a class="nav-link" asp-controller="PanelDocente" asp-action="CargaAcademica">Carga Académica</a>
                         </li>
-
                     </ul>
-                </div>
-            </div>
-        </nav>
-    }
-
-    @* MENÚ DEL ESTUDIANTE *@
-    @if (esEstudiante &&
-        !(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" &&
-          ViewContext.RouteData.Values["action"]?.ToString() == "Index"))
-    {
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
-            <div class="container">
-                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Dashboard">Panel Estudiante</a>
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#estudianteNavbar"
-                        aria-controls="estudianteNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="estudianteNavbar">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
+                }
+                else if (esEstudiante)
+                {
+                    <div class="ura-sidebar-title">Panel Estudiante</div>
+                    <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Dashboard">
-                                Dashboard
-                            </a>
+                            <a class="nav-link @ClaseActivaHome("Dashboard")" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Estudiante" asp-action="Cursos">
-                                Cursos Disponibles
-                            </a>
+                            <a class="nav-link @(controllerActual == "Estudiante" && accionActual == "Cursos" ? "active" : "")" asp-controller="Estudiante" asp-action="Cursos">Cursos Disponibles</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Estudiante" asp-action="MisCursos">
-                                Mis Cursos
-                            </a>
+                            <a class="nav-link @(controllerActual == "Estudiante" && accionActual == "MisCursos" ? "active" : "")" asp-controller="Estudiante" asp-action="MisCursos">Mis Cursos</a>
                         </li>
-
                     </ul>
-                </div>
-            </div>
-        </nav>
-    }
+                }
+            </aside>
+        }
 
-    <div class="container mt-4">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        <div class="ura-content">
+            <div class="@(mostrarSidebar ? "container-fluid" : "container") mt-4">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+
     </div>
 
     <footer class="ura-footer text-center mt-5 py-3">
