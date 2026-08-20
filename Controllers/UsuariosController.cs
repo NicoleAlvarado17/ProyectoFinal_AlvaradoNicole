@@ -20,8 +20,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 			_roleManager = roleManager;
 			_context = context;
 		}
-
-		// GET: /Usuarios
 		public async Task<IActionResult> Index()
 		{
 			var usuarios = _userManager.Users.OrderBy(u => u.Email).ToList();
@@ -41,15 +39,11 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
 			return View(lista);
 		}
-
-		// GET: /Usuarios/Create
 		public IActionResult Create()
 		{
 			ViewBag.Roles = new SelectList(new[] { "Docente", "Estudiante", "Admin" });
 			return View(new CreateUsuarioViewModel());
 		}
-
-		// POST: /Usuarios/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(CreateUsuarioViewModel model)
@@ -87,10 +81,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 				}
 
 				await _userManager.AddToRoleAsync(user, model.Role);
-
-				// El Panel Docente y el catálogo de cursos buscan a la persona por
-				// correo en las tablas Docentes/Estudiantes; sin este registro, un
-				// usuario creado aquí por el administrador quedaría sin panel funcional.
 				if (model.Role == "Docente" && !await _context.Docentes.AnyAsync(d => d.Correo == user.Email))
 				{
 					_context.Docentes.Add(new Docente
@@ -127,8 +117,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 			ViewBag.Roles = new SelectList(new[] { "Docente", "Estudiante", "Admin" });
 			return View(model);
 		}
-
-		// POST: /Usuarios/Delete/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Delete(string id)

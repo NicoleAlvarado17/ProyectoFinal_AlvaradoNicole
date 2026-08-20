@@ -1,8 +1,4 @@
 @{
-    // Si una cuenta llegara a tener más de un rol asignado (por ejemplo, un
-    // Admin que además quedó con el rol Estudiante de una prueba anterior),
-    // se muestra un solo panel de navegación, con esta prioridad, para no
-    // apilar varias barras de menú a la vez.
     var esAdmin = User.IsInRole("Admin");
     var esDocente = !esAdmin && User.IsInRole("Docente");
     var esEstudiante = !esAdmin && !esDocente && User.IsInRole("Estudiante");
@@ -11,11 +7,6 @@
     var accionActual = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
 
     var esInicio = controllerActual == "Home" && accionActual == "Index";
-
-    // El plan de estudios de una carrera es una página pública informativa
-    // (a la que se llega desde "Ver más" en el inicio): debe verse siempre
-    // igual para cualquiera, sin el panel de administración/docente/estudiante
-    // aunque quien la mire haya iniciado sesión con ese rol.
     var esPaginaPublica = esInicio || (controllerActual == "Carreras" && accionActual == "PlanEstudios");
 
     string ClaseActiva(string controlador) => controllerActual == controlador ? "active" : "";

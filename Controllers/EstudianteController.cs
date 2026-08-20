@@ -58,9 +58,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         }
 
         private const int PageSizeCursos = 6;
-
-        // HU05/HU09 - catálogo de cursos disponibles, con paginación y filtros
-        // (créditos, modalidad, texto libre) resueltos vía AJAX en CursosParcial.
         public async Task<IActionResult> Cursos(int page = 1, int? creditos = null, string? modalidad = null, string? busqueda = null)
         {
             var estudiante = await GetOrCreateEstudianteAsync();
@@ -78,9 +75,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             var vm = await ObtenerCursosDisponiblesAsync(estudiante, page, creditos, modalidad, busqueda);
             return View(vm);
         }
-
-        // Devuelve solo el fragmento de tabla + paginación, para refrescar el
-        // catálogo mediante AJAX sin recargar la página completa.
         [HttpGet]
         public async Task<IActionResult> CursosParcial(int page = 1, int? creditos = null, string? modalidad = null, string? busqueda = null)
         {
@@ -172,10 +166,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
                 };
                 _context.Matriculas.Add(matricula);
                 await _context.SaveChangesAsync();
-
-                // Registra la transacción de pago de la matrícula (HU-Pago). El número
-                // de transacción se basa en el Id de la matrícula para que sea único
-                // y fácil de rastrear en el comprobante.
                 var pago = new Pago
                 {
                     MatriculaId = matricula.Id,
@@ -268,9 +258,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             return RedirectToAction(nameof(MisCursos));
         }
-
-        // HU11 - Historial académico: cursos ya finalizados (con nota asignada),
-        // de cuatrimestres anteriores. "Aprobada" si Nota >= 70, "Reprobada" si no.
         public async Task<IActionResult> Historial()
         {
             var estudiante = await GetOrCreateEstudianteAsync();
@@ -298,10 +285,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             return View(vm);
         }
-
-        // Comprobante de matrícula en formato de factura: incluye número de
-        // comprobante, datos del estudiante, tabla de cursos con su costo, total
-        // y el detalle de las transacciones de pago (tabla Pagos) asociadas.
         public async Task<IActionResult> Comprobante()
         {
             var estudiante = await GetOrCreateEstudianteAsync();
@@ -462,8 +445,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         public string Horario { get; set; } = "";
         public string Docente { get; set; } = "";
     }
-
-    // HU11 - Fila del historial académico del estudiante.
     public class HistorialAcademicoItemViewModel
     {
         public string Curso { get; set; } = "";

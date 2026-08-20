@@ -1,6 +1,4 @@
-/* ============================
-   Bootstrap base adjustments
-   ============================ */
+
 
 html {
     font-size: 14px;
@@ -27,32 +25,24 @@ body {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-/* ============================
-   URA Colors
-   (paleta del prototipo de diseño: azules y dorados)
-   ============================ */
+
 
 :root {
-    --ura-blue: #1A365D;       /* azul oscuro institucional */
+    --ura-blue: #1A365D;
     --ura-blue-dark: #1A365D;
-    --ura-blue-light: #2B6CB0; /* azul medio: botones primarios / enlaces */
-    --ura-gold: #D69E2E;       /* dorado: acentos y llamadas a la acción */
+    --ura-blue-light: #2B6CB0;
+    --ura-gold: #D69E2E;
     --ura-gold-light: #ECC94B;
     --ura-bg: #F8F9FA;
 }
 
-/* ============================
-   Global Typography
-   ============================ */
+
 
 h1, h2, h3 {
     color: var(--ura-blue);
 }
 
-/* ============================
-   Buttons
-   (azul = acción principal/navegación, dorado = crear/destacar)
-   ============================ */
+
 
 .btn-primary {
     background-color: var(--ura-blue-light);
@@ -82,9 +72,7 @@ h1, h2, h3 {
         color: #1A365D;
     }
 
-/* ============================
-   Navbar & Header & Footer
-   ============================ */
+
 
 .navbar {
     background-color: var(--ura-blue) !important;
@@ -101,11 +89,7 @@ h1, h2, h3 {
     border-top: 5px solid var(--ura-gold);
 }
 
-/* ============================
-   Panel lateral (sidebar) de navegación
-   Reemplaza el menú horizontal por uno lateral fijo, como en el
-   prototipo de diseño, para las vistas de Admin/Docente/Estudiante.
-   ============================ */
+
 
 .ura-layout {
     display: flex;
@@ -167,10 +151,7 @@ h1, h2, h3 {
     }
 }
 
-/* ============================
-   Tablas
-   Encabezado azul oscuro con texto blanco, como en el prototipo.
-   ============================ */
+
 
 .table thead th,
 .table > :not(caption) > * > th {
@@ -185,9 +166,7 @@ h1, h2, h3 {
     background-color: #fff;
 }
 
-/* ============================
-   Home Page Hero Section
-   ============================ */
+
 
 .hero-section {
     background: linear-gradient(135deg, var(--ura-blue), #204a7a);
@@ -232,9 +211,7 @@ h1, h2, h3 {
     font-weight: 700;
 }
 
-/* ============================
-   Cards & Sections
-   ============================ */
+
 
 .section-title {
     color: var(--ura-blue);
@@ -276,9 +253,7 @@ h1, h2, h3 {
     border-radius: 12px;
 }
 
-/* ============================
-   Tarjetas de estadísticas (dashboards)
-   ============================ */
+
 
 .stat-card {
     border-top: 4px solid var(--ura-gold);
@@ -288,9 +263,7 @@ h1, h2, h3 {
         border-top-color: var(--ura-blue-light);
     }
 
-/* ============================
-   URA Institutional Forms
-   ============================ */
+
 
 .ura-auth-wrapper {
     display: flex;
@@ -333,13 +306,12 @@ h1, h2, h3 {
     margin: auto;
 }
 
-/* Tarjetas de login/registro: más angostas y siempre centradas */
+
 .ura-auth-card {
     max-width: 460px;
 }
 
-/* Modificador para tarjetas que deben ocupar todo el ancho disponible
-   (tablas, encabezados de dashboard, tarjetas de estadísticas en grilla) */
+
 .ura-box-wide {
     max-width: none;
 }
