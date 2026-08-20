@@ -69,17 +69,14 @@
                 });
             }
 
-            // Filtro por AJAX: al enviar el formulario, se pide solo el fragmento
-            // parcial (CursosParcial) y se reemplaza el contenedor de resultados,
-            // sin recargar la página completa.
+        
             $('#formFiltroCursos').on('submit', function (e) {
                 e.preventDefault();
                 var query = $(this).serialize();
                 cargarCursos('@Url.Action("CursosParcial", "Estudiante")?' + query);
             });
 
-            // Los enlaces de paginación dentro del contenedor también se resuelven
-            // por AJAX (delegación de eventos, porque se regeneran en cada carga).
+            
             $resultado.on('click', 'a.page-link', function (e) {
                 e.preventDefault();
                 var href = $(this).attr('href');
