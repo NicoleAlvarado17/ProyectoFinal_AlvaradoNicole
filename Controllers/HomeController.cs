@@ -63,6 +63,52 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
                 .Where(m => m.EstudianteId == estudiante.Id && m.Estado == "Activa")
                 .ToListAsync();
 
+            // HU11 - Cursos ya finalizados (con nota), usados para el promedio
+            // ponderado y el progreso de la carrera.
+            var matriculasFinalizadas = await _context.Matriculas
+                .Include(m => m.Curso)
+                .Where(m => m.EstudianteId == estudiante.Id && m.Nota != null)
+                .ToListAsync();
+
+            double? promedioGeneral = null;
+            var creditosParaPromedio = matriculasFinalizadas.Sum(m => m.Curso.Creditos);
+            if (creditosParaPromedio > 0)
+            {
+                promedioGeneral = matriculasFinalizadas.Sum(m => m.Nota!.Value * m.Curso.Creditos) / (double)creditosParaPromedio;
+            }
+
+            var creditosAprobados = matriculasFinalizadas
+                .Where(m => m.Estado == "Aprobada")
+                .Sum(m => m.Curso.Creditos);
+
+            var creditosCarreraTotales = await _context.Cursos
+                .Where(c => c.CarreraId == estudiante.CarreraId && c.Estado == "Activo")
+                .SumAsync(c => c.Creditos);
+
+            double progresoCarrera = creditosCarreraTotales > 0
+                ? Math.Round(creditosAprobados * 100.0 / creditosCarreraTotales, 0)
+                : 0;
+
+            // HU10 - Progreso del cuatrimestre: % de asistencia registrada por curso activo.
+            var cursoIdsActivos = matriculasActivas.Select(m => m.CursoId).ToList();
+            var asistenciasActivas = await _context.Asistencias
+                .Where(a => a.EstudianteId == estudiante.Id && cursoIdsActivos.Contains(a.CursoId))
+                .ToListAsync();
+
+            var progresoCursos = matriculasActivas.Select(m =>
+            {
+                var registros = asistenciasActivas.Where(a => a.CursoId == m.CursoId).ToList();
+                double? porcentaje = registros.Any()
+                    ? Math.Round(registros.Count(a => a.Presente) * 100.0 / registros.Count, 0)
+                    : null;
+
+                return new EstudianteDashboardProgresoCursoViewModel
+                {
+                    Nombre = m.Curso.Nombre,
+                    PorcentajeAsistencia = porcentaje
+                };
+            }).ToList();
+
             var vm = new EstudianteDashboardViewModel
             {
                 NombreEstudiante = appUser?.FullName ?? estudiante.Nombre,
@@ -74,7 +120,12 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
                     Nombre = m.Curso.Nombre,
                     Modalidad = m.Curso.Modalidad,
                     Estado = m.Estado
-                }).ToList()
+                }).ToList(),
+                PromedioGeneral = promedioGeneral,
+                CreditosCarreraCompletados = creditosAprobados,
+                CreditosCarreraTotales = creditosCarreraTotales,
+                ProgresoCarreraPorcentaje = progresoCarrera,
+                ProgresoCursos = progresoCursos
             };
 
             return View(vm);

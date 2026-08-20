@@ -4,51 +4,55 @@
 
 @{
     ViewData["Title"] = "Registro de Estudiante";
+    Layout = "_LayoutAuth";
 }
 
-<div class="ura-box mt-5">
-    <img src="~/img/logo-ura.png" class="ura-logo" />
+<div class="ura-auth-badge">URA</div>
 
-    <h2 class="ura-title">Crear cuenta </h2>
+<h2 class="ura-title mb-1">Crear cuenta de Estudiante</h2>
+<p class="text-center text-muted mb-4">Universidad Real Americana</p>
 
-    <form method="post">
-        @Html.AntiForgeryToken()
+<form method="post">
+    @Html.AntiForgeryToken()
 
-        <div asp-validation-summary="All" class="text-danger"></div>
+    <div asp-validation-summary="All" class="text-danger"></div>
 
-        <div class="mb-3">
-            <label>Nombre completo</label>
-            <input asp-for="Input.FullName" class="form-control" />
-            <span asp-validation-for="Input.FullName" class="text-danger"></span>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Nombre completo</label>
+        <input asp-for="Input.FullName" class="form-control" placeholder="Nicole Vargas Solano" />
+        <span asp-validation-for="Input.FullName" class="text-danger"></span>
+    </div>
 
-        <div class="mb-3">
-            <label>Correo electrónico</label>
-            <input asp-for="Input.Email" class="form-control" />
-            <span asp-validation-for="Input.Email" class="text-danger"></span>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Correo electrónico</label>
+        <input asp-for="Input.Email" class="form-control" placeholder="nicole@ura.edu" />
+        <span asp-validation-for="Input.Email" class="text-danger"></span>
+    </div>
 
-        <div class="mb-3">
-            <label>Contraseña</label>
-            <input asp-for="Input.Password" class="form-control" type="password" />
-            <span asp-validation-for="Input.Password" class="text-danger"></span>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Contraseña</label>
+        <input asp-for="Input.Password" class="form-control" type="password" placeholder="••••••••" />
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+    </div>
 
-        <div class="mb-3">
-            <label>Carrera</label>
-            <select asp-for="Input.Carrera" class="form-control">
-                <option>Ingeniería en Sistemas</option>
-                <option>Administración</option>
-                <option>Enfermería</option>
-                <option>Derecho</option>
-                <option>Educación</option>
-                <option>Contabilidad</option>
-            </select>
-        </div>
+    <div class="mb-4">
+        <label class="form-label">Carrera</label>
+        <select asp-for="Input.Carrera" class="form-select">
+            <option>Ingeniería en Sistemas</option>
+            <option>Administración</option>
+            <option>Enfermería</option>
+            <option>Derecho</option>
+            <option>Educación</option>
+            <option>Contabilidad</option>
+        </select>
+    </div>
 
-        <button type="submit" class="btn btn-warning w-100">Crear cuenta</button>
-    </form>
-</div>
+    <button type="submit" class="btn btn-warning btn-lg w-100">Crear cuenta</button>
+
+    <div class="text-center mt-3">
+        <a asp-page="./Login" class="ura-link">¿Ya tenés cuenta? Iniciar sesión</a>
+    </div>
+</form>
 
 @section Scripts {
     <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />

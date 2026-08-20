@@ -269,6 +269,36 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             return RedirectToAction(nameof(MisCursos));
         }
 
+        // HU11 - Historial académico: cursos ya finalizados (con nota asignada),
+        // de cuatrimestres anteriores. "Aprobada" si Nota >= 70, "Reprobada" si no.
+        public async Task<IActionResult> Historial()
+        {
+            var estudiante = await GetOrCreateEstudianteAsync();
+            if (estudiante == null)
+            {
+                TempData["Error"] = "No se pudo identificar tu perfil de estudiante.";
+                return RedirectToAction("Dashboard", "Home");
+            }
+
+            var historial = await _context.Matriculas
+                .Include(m => m.Curso)
+                .Where(m => m.EstudianteId == estudiante.Id && m.Nota != null)
+                .OrderByDescending(m => m.Cuatrimestre)
+                .ThenBy(m => m.Curso.Nombre)
+                .ToListAsync();
+
+            var vm = historial.Select(m => new HistorialAcademicoItemViewModel
+            {
+                Curso = m.Curso.Nombre,
+                Codigo = m.Curso.Codigo,
+                Cuatrimestre = m.Cuatrimestre,
+                Nota = m.Nota ?? 0,
+                Estado = m.Estado
+            }).ToList();
+
+            return View(vm);
+        }
+
         // Comprobante de matrícula en formato de factura: incluye número de
         // comprobante, datos del estudiante, tabla de cursos con su costo, total
         // y el detalle de las transacciones de pago (tabla Pagos) asociadas.
@@ -431,5 +461,15 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         public string Sede { get; set; } = "";
         public string Horario { get; set; } = "";
         public string Docente { get; set; } = "";
+    }
+
+    // HU11 - Fila del historial académico del estudiante.
+    public class HistorialAcademicoItemViewModel
+    {
+        public string Curso { get; set; } = "";
+        public string Codigo { get; set; } = "";
+        public string Cuatrimestre { get; set; } = "";
+        public int Nota { get; set; }
+        public string Estado { get; set; } = "";
     }
 }

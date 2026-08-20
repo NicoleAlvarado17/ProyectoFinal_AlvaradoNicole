@@ -1,0 +1,45 @@
+@model List<ProyectoFinal_AlvaradoNicole.Controllers.HistorialAcademicoItemViewModel>
+@{
+    ViewData["Title"] = "Historial Académico";
+}
+
+<div class="container mt-4">
+    <h1 class="section-title mb-1">Historial académico</h1>
+    <p class="text-muted mb-4">Notas &ge; 70 aprobado &bull; Resaltadas en dorado</p>
+
+    <div class="ura-box ura-box-wide p-4">
+        @if (!Model.Any())
+        {
+            <p class="text-muted mb-0">
+                Todavía no tienes cursos finalizados en tu historial académico.
+            </p>
+        }
+        else
+        {
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Cuatrimestre</th>
+                        <th>Nota</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="@(item.Estado == "Aprobada" ? "table-warning" : "")">
+                            <td>
+                                <div class="fw-bold">@item.Curso</div>
+                                <div class="text-muted" style="font-size: 0.8rem;">@item.Codigo</div>
+                            </td>
+                            <td>@item.Cuatrimestre</td>
+                            <td class="fw-bold">@item.Nota</td>
+                            <td>@await Component.InvokeAsync("EstadoBadge", new { estado = item.Estado })</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

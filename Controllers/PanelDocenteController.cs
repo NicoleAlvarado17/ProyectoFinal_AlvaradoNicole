@@ -15,6 +15,45 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             _context = context;
         }
 
+        // Abreviaturas de día usadas en el campo Curso.Horario (ej. "Lun/Mié 18:00-20:00").
+        private static readonly Dictionary<DayOfWeek, string> AbreviaturasDia = new()
+        {
+            { DayOfWeek.Monday, "Lun" },
+            { DayOfWeek.Tuesday, "Mar" },
+            { DayOfWeek.Wednesday, "Mié" },
+            { DayOfWeek.Thursday, "Jue" },
+            { DayOfWeek.Friday, "Vie" },
+            { DayOfWeek.Saturday, "Sáb" },
+            { DayOfWeek.Sunday, "Dom" }
+        };
+
+        private static readonly Dictionary<DayOfWeek, string> NombresDia = new()
+        {
+            { DayOfWeek.Monday, "lunes" },
+            { DayOfWeek.Tuesday, "martes" },
+            { DayOfWeek.Wednesday, "miércoles" },
+            { DayOfWeek.Thursday, "jueves" },
+            { DayOfWeek.Friday, "viernes" },
+            { DayOfWeek.Saturday, "sábado" },
+            { DayOfWeek.Sunday, "domingo" }
+        };
+
+        // El campo Horario tiene el formato "Día[/Día2] HH:mm-HH:mm" (ej. "Lun/Mié 18:00-20:00"
+        // o "Vie 08:00-12:00"). Esta función revisa si alguno de los días listados es "hoy".
+        private static bool SesionEsHoy(string horario, string abreviaturaHoy)
+        {
+            if (string.IsNullOrWhiteSpace(horario)) return false;
+            var dias = horario.Split(' ')[0].Split('/');
+            return dias.Any(d => d.Equals(abreviaturaHoy, StringComparison.OrdinalIgnoreCase));
+        }
+
+        // Extrae solo el rango de horas (ej. "18:00-20:00") del campo Horario.
+        private static string ExtraerHora(string horario)
+        {
+            var partes = horario.Split(' ', 2);
+            return partes.Length > 1 ? partes[1] : horario;
+        }
+
         // DASHBOARD
         public async Task<IActionResult> DashboardDocente()
         {
@@ -34,8 +73,25 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
                 .Where(m => cursos.Select(c => c.Id).Contains(m.CursoId))
                 .CountAsync();
 
+            var hoy = DateTime.Today.DayOfWeek;
+            var abreviaturaHoy = AbreviaturasDia[hoy];
+
+            var sesionesHoy = cursos
+                .Where(c => SesionEsHoy(c.Horario, abreviaturaHoy))
+                .Select(c => new SesionHoyViewModel
+                {
+                    Hora = ExtraerHora(c.Horario),
+                    Materia = c.Nombre,
+                    Grupo = c.Grupo,
+                    Aula = c.Aula
+                })
+                .OrderBy(s => s.Hora)
+                .ToList();
+
             ViewBag.Cursos = cursos.Count;
             ViewBag.Estudiantes = totalEstudiantes;
+            ViewBag.NombreDiaHoy = NombresDia[hoy];
+            ViewBag.SesionesHoy = sesionesHoy;
 
             return View(docente);
         }
@@ -156,6 +212,15 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         public int EstudianteId { get; set; }
         public string Nombre { get; set; } = "";
         public bool Presente { get; set; }
+    }
+
+    // HU12 - Una sesión de clase de hoy en el Dashboard Docente (materia, grupo y aula).
+    public class SesionHoyViewModel
+    {
+        public string Hora { get; set; } = "";
+        public string Materia { get; set; } = "";
+        public string Grupo { get; set; } = "";
+        public string Aula { get; set; } = "";
     }
 
     public class GuardarAsistenciaRequest

@@ -292,14 +292,56 @@ h1, h2, h3 {
    URA Institutional Forms
    ============================ */
 
+.ura-auth-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 260px);
+    padding: 2.5rem 1rem;
+}
+
+.ura-auth-badge {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background-color: var(--ura-blue);
+    color: var(--ura-gold);
+    font-weight: 800;
+    font-size: 1.3rem;
+    letter-spacing: .05em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--ura-blue);
+    font-size: .9rem;
+}
+
 .ura-box {
     background: white;
     padding: 40px;
     border-radius: 12px;
     border-top: 6px solid var(--ura-gold);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    width: 520px;
+    width: 100%;
+    max-width: 600px;
     margin: auto;
+}
+
+/* Tarjetas de login/registro: más angostas y siempre centradas */
+.ura-auth-card {
+    max-width: 460px;
+}
+
+/* Modificador para tarjetas que deben ocupar todo el ancho disponible
+   (tablas, encabezados de dashboard, tarjetas de estadísticas en grilla) */
+.ura-box-wide {
+    max-width: none;
 }
 
 .ura-logo {

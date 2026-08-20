@@ -4,7 +4,7 @@
 }
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-start ura-box p-4 mb-4 flex-wrap gap-3">
+    <div class="d-flex justify-content-between align-items-start ura-box ura-box-wide p-4 mb-4 flex-wrap gap-3">
         <div>
             <h1 class="mb-1">Bienvenido, @Model.NombreEstudiante</h1>
             <p class="text-muted mb-0">Carrera: @Model.NombreCarrera</p>
@@ -14,15 +14,61 @@
     </div>
 
     <div class="row g-3">
-        <div class="col-md-6">
+        <div class="col-6 col-md-3">
             @await Component.InvokeAsync("StatCard", new { label = "Créditos matriculados", value = Model.CreditosMatriculados.ToString(), subtitle = "cuatrimestre actual" })
         </div>
-        <div class="col-md-6">
+        <div class="col-6 col-md-3">
             @await Component.InvokeAsync("StatCard", new { label = "Cursos activos", value = Model.CursosActivos.ToString(), subtitle = "este cuatrimestre" })
+        </div>
+        <div class="col-6 col-md-3">
+            @await Component.InvokeAsync("StatCard", new
+            {
+                label = "Promedio general",
+                value = Model.PromedioGeneral.HasValue ? Model.PromedioGeneral.Value.ToString("0") : "N/D",
+                subtitle = Model.PromedioGeneral.HasValue ? Model.DesempenoTexto : "Aún sin cursos finalizados"
+            })
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="ura-box ura-box-wide stat-card p-4 h-100">
+                <p class="text-muted mb-1">Progreso académico</p>
+                <h2 class="mb-2">@Model.ProgresoCarreraPorcentaje.ToString("0")%</h2>
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar" role="progressbar" style="width: @Model.ProgresoCarreraPorcentaje.ToString("0", System.Globalization.CultureInfo.InvariantCulture)%; background-color: var(--ura-gold);"></div>
+                </div>
+                <p class="text-muted mb-0 mt-1" style="font-size: 0.8rem;">@Model.ProgresoCarreraPorcentaje.ToString("0")% de la carrera completada</p>
+            </div>
         </div>
     </div>
 
-    <div class="ura-box p-4 mt-4">
+    <div class="ura-box ura-box-wide p-4 mt-4">
+        <h4 class="mb-1">Progreso del cuatrimestre</h4>
+        <p class="text-muted mb-3" style="font-size: 0.9rem;">
+            @Model.CursosActivos curso@(Model.CursosActivos == 1 ? "" : "s") activo@(Model.CursosActivos == 1 ? "" : "s")
+            &bull; @Model.CreditosMatriculados créditos
+        </p>
+
+        @if (!Model.ProgresoCursos.Any())
+        {
+            <p class="text-muted mb-0">Todavía no tienes cursos activos este cuatrimestre.</p>
+        }
+        else
+        {
+            @foreach (var curso in Model.ProgresoCursos)
+            {
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="fw-bold">@curso.Nombre</span>
+                        <span class="text-muted">@(curso.PorcentajeAsistencia.HasValue ? curso.PorcentajeAsistencia.Value.ToString("0") + "%" : "Sin datos")</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar" role="progressbar" style="width: @(curso.PorcentajeAsistencia.HasValue ? curso.PorcentajeAsistencia.Value.ToString("0", System.Globalization.CultureInfo.InvariantCulture) : "0")%; background-color: var(--ura-blue-light);"></div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <div class="ura-box ura-box-wide p-4 mt-4">
         <h4 class="mb-3">Mis cursos activos</h4>
 
         @if (!Model.Cursos.Any())

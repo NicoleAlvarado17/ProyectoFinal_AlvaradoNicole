@@ -89,11 +89,11 @@ namespace SistemaMatriculaURA.Models
             // comprobante de matrícula (factura) que descarga el estudiante.
             modelBuilder.Entity<Curso>().HasData(
                 // Ingeniería en Sistemas (CarreraId = 1)
-                new Curso { Id = 1, Codigo = "SC-301", Nombre = "Estructuras de Datos", Creditos = 4, CarreraId = 1, DocenteId = 1, Modalidad = "Presencial", Sede = "San José", Horario = "Lun/Mié 18:00-20:00", Estado = "Activo", Costo = 180000m },
-                new Curso { Id = 2, Codigo = "SC-220", Nombre = "Bases de Datos II", Creditos = 3, CarreraId = 1, Modalidad = "Virtual", Sede = "Online", Horario = "Mar/Jue 19:00-21:00", Estado = "Activo", Costo = 135000m },
+                new Curso { Id = 1, Codigo = "SC-301", Nombre = "Estructuras de Datos", Creditos = 4, CarreraId = 1, DocenteId = 1, Modalidad = "Presencial", Sede = "San José", Horario = "Lun/Mié 18:00-20:00", Grupo = "A", Aula = "Aula 204", Estado = "Activo", Costo = 180000m },
+                new Curso { Id = 2, Codigo = "SC-220", Nombre = "Bases de Datos II", Creditos = 3, CarreraId = 1, DocenteId = 1, Modalidad = "Virtual", Sede = "Online", Horario = "Mar/Jue 19:00-21:00", Grupo = "B", Aula = "Sala Virtual 1", Estado = "Activo", Costo = 135000m },
                 new Curso { Id = 4, Codigo = "SC-310", Nombre = "Programación Avanzada", Creditos = 4, CarreraId = 1, Modalidad = "Presencial", Sede = "San José", Horario = "Lun/Mié 20:00-22:00", Estado = "Activo", Costo = 180000m },
                 new Curso { Id = 5, Codigo = "SC-315", Nombre = "Redes de Computadoras", Creditos = 3, CarreraId = 1, Modalidad = "Presencial", Sede = "San José", Horario = "Mar/Jue 18:00-20:00", Estado = "Activo", Costo = 135000m },
-                new Curso { Id = 6, Codigo = "SC-402", Nombre = "Ingeniería de Software", Creditos = 4, CarreraId = 1, Modalidad = "Virtual", Sede = "Online", Horario = "Vie 08:00-12:00", Estado = "Activo", Costo = 180000m },
+                new Curso { Id = 6, Codigo = "SC-402", Nombre = "Ingeniería de Software", Creditos = 4, CarreraId = 1, DocenteId = 1, Modalidad = "Virtual", Sede = "Online", Horario = "Vie 08:00-12:00", Grupo = "A", Aula = "Sala Virtual 2", Estado = "Activo", Costo = 180000m },
 
                 // Administración de Empresas (CarreraId = 2)
                 new Curso { Id = 3, Codigo = "ADM-101", Nombre = "Introducción a la Administración", Creditos = 3, CarreraId = 2, Modalidad = "Presencial", Sede = "San José", Horario = "Vie 08:00-11:00", Estado = "Activo", Costo = 135000m },
@@ -137,7 +137,7 @@ namespace SistemaMatriculaURA.Models
             modelBuilder.Entity<Curso>().HasData(
                 // Ingeniería en Sistemas (CarreraId = 1)
                 new Curso { Id = 30, Codigo = "SC-410", Nombre = "Inteligencia Artificial", Creditos = 4, CarreraId = 1, Modalidad = "Híbrido", Sede = "San José", Horario = "Sáb 13:00-17:00", Estado = "Activo", Costo = 180000m },
-                new Curso { Id = 31, Codigo = "SC-215", Nombre = "Sistemas Operativos", Creditos = 3, CarreraId = 1, Modalidad = "Presencial", Sede = "San José", Horario = "Lun/Mié 07:00-09:00", Estado = "Activo", Costo = 135000m },
+                new Curso { Id = 31, Codigo = "SC-215", Nombre = "Sistemas Operativos", Creditos = 3, CarreraId = 1, DocenteId = 1, Modalidad = "Presencial", Sede = "San José", Horario = "Lun/Mié 07:00-09:00", Grupo = "C", Aula = "Aula 210", Estado = "Activo", Costo = 135000m },
                 new Curso { Id = 32, Codigo = "SC-150", Nombre = "Introducción a la Programación", Creditos = 2, CarreraId = 1, Modalidad = "Virtual", Sede = "Online", Horario = "Mar/Jue 07:00-08:30", Estado = "Activo", Costo = 90000m },
 
                 // Administración de Empresas (CarreraId = 2)
@@ -171,7 +171,7 @@ namespace SistemaMatriculaURA.Models
             // uniforme, con 5 cursos por página).
             modelBuilder.Entity<Curso>().HasData(
                 new Curso { Id = 48, Codigo = "SC-330", Nombre = "Arquitectura de Software", Creditos = 3, CarreraId = 1, Modalidad = "Presencial", Sede = "San José", Horario = "Jue 18:00-20:00", Estado = "Activo", Costo = 135000m },
-                new Curso { Id = 49, Codigo = "SC-360", Nombre = "Seguridad Informática", Creditos = 3, CarreraId = 1, Modalidad = "Virtual", Sede = "Online", Horario = "Sáb 09:00-11:00", Estado = "Activo", Costo = 135000m },
+                new Curso { Id = 49, Codigo = "SC-360", Nombre = "Seguridad Informática", Creditos = 3, CarreraId = 1, DocenteId = 1, Modalidad = "Virtual", Sede = "Online", Horario = "Sáb 09:00-11:00", Grupo = "B", Aula = "Sala Virtual 3", Estado = "Activo", Costo = 135000m },
 
                 new Curso { Id = 50, Codigo = "ADM-220", Nombre = "Recursos Humanos", Creditos = 3, CarreraId = 2, Modalidad = "Presencial", Sede = "San José", Horario = "Mar 18:00-19:30", Estado = "Activo", Costo = 135000m },
                 new Curso { Id = 51, Codigo = "ADM-350", Nombre = "Logística y Cadena de Suministro", Creditos = 3, CarreraId = 2, Modalidad = "Híbrido", Sede = "Heredia", Horario = "Jue 17:00-19:30", Estado = "Activo", Costo = 135000m },
@@ -190,14 +190,76 @@ namespace SistemaMatriculaURA.Models
                 new Curso { Id = 60, Codigo = "CO-420", Nombre = "Auditoría Avanzada", Creditos = 4, CarreraId = 6, Modalidad = "Híbrido", Sede = "Heredia", Horario = "Sáb 09:00-13:00", Estado = "Activo", Costo = 180000m }
             );
 
+            // Matrículas del estudiante de demostración (Nicole Vargas Solano, Id 1):
+            // 4 cursos activos del cuatrimestre actual (II-2026) + 6 cursos ya
+            // finalizados en cuatrimestres anteriores (con Nota) para poblar el
+            // Historial Académico (HU11) y las métricas del Dashboard Estudiante
+            // (promedio ponderado y progreso de carrera - HU07/HU10).
+            //
+            // IMPORTANTE: se usan Id altos (9001+) a propósito, en vez de 2,3,4...
+            // La columna Id es IDENTITY y ya existen filas reales creadas por la
+            // aplicación (matrículas hechas al probar "Matricular" en el catálogo),
+            // así que usar Id bajos aquí choca con esas filas reales al aplicar la
+            // migración (Violation of PRIMARY KEY constraint).
             modelBuilder.Entity<Matricula>().HasData(
-                new Matricula { Id = 1, EstudianteId = 1, CursoId = 1, Fecha = new DateTime(2026, 7, 1), Estado = "Activa" }
+                // Matrícula original (ya sembrada desde la migración inicial): solo
+                // se le agrega Cuatrimestre, no cambia de Id.
+                new Matricula { Id = 1, EstudianteId = 1, CursoId = 1, Fecha = new DateTime(2026, 7, 1), Estado = "Activa", Cuatrimestre = "II-2026" },
+
+                // Cuatrimestre actual (Activa, sin nota todavía)
+                new Matricula { Id = 9001, EstudianteId = 1, CursoId = 2, Fecha = new DateTime(2026, 7, 1), Estado = "Activa", Cuatrimestre = "II-2026" },
+                new Matricula { Id = 9002, EstudianteId = 1, CursoId = 30, Fecha = new DateTime(2026, 7, 1), Estado = "Activa", Cuatrimestre = "II-2026" },
+                new Matricula { Id = 9003, EstudianteId = 1, CursoId = 49, Fecha = new DateTime(2026, 7, 1), Estado = "Activa", Cuatrimestre = "II-2026" },
+
+                // Historial académico (cursos finalizados en cuatrimestres previos)
+                new Matricula { Id = 9004, EstudianteId = 1, CursoId = 32, Fecha = new DateTime(2025, 2, 1), Estado = "Aprobada", Cuatrimestre = "I-2025", Nota = 92 },
+                new Matricula { Id = 9005, EstudianteId = 1, CursoId = 4, Fecha = new DateTime(2025, 2, 1), Estado = "Aprobada", Cuatrimestre = "I-2025", Nota = 78 },
+                new Matricula { Id = 9006, EstudianteId = 1, CursoId = 5, Fecha = new DateTime(2025, 8, 1), Estado = "Reprobada", Cuatrimestre = "II-2025", Nota = 65 },
+                new Matricula { Id = 9007, EstudianteId = 1, CursoId = 48, Fecha = new DateTime(2025, 8, 1), Estado = "Aprobada", Cuatrimestre = "II-2025", Nota = 85 },
+                new Matricula { Id = 9008, EstudianteId = 1, CursoId = 6, Fecha = new DateTime(2025, 8, 1), Estado = "Aprobada", Cuatrimestre = "II-2025", Nota = 90 },
+                new Matricula { Id = 9009, EstudianteId = 1, CursoId = 31, Fecha = new DateTime(2026, 2, 1), Estado = "Aprobada", Cuatrimestre = "I-2026", Nota = 88 }
             );
 
-            // Pago (transacción) correspondiente a la matrícula de demostración,
-            // para que el comprobante/factura tenga datos reales desde el primer momento.
+            // Pagos (transacciones) correspondientes a las matrículas activas del
+            // cuatrimestre actual, para que el comprobante/factura tenga datos
+            // reales desde el primer momento. Mismo motivo que arriba: Id altos
+            // (9001+) para no chocar con pagos reales ya creados por la app.
             modelBuilder.Entity<Pago>().HasData(
-                new Pago { Id = 1, MatriculaId = 1, Monto = 180000m, FechaPago = new DateTime(2026, 7, 1), NumeroTransaccion = "TXN-00000001", MetodoPago = "Tarjeta de crédito", Estado = "Completado" }
+                // Pago original (ya sembrado desde la migración inicial), sin cambios.
+                new Pago { Id = 1, MatriculaId = 1, Monto = 180000m, FechaPago = new DateTime(2026, 7, 1), NumeroTransaccion = "TXN-00000001", MetodoPago = "Tarjeta de crédito", Estado = "Completado" },
+
+                new Pago { Id = 9001, MatriculaId = 9001, Monto = 135000m, FechaPago = new DateTime(2026, 7, 1), NumeroTransaccion = "TXN-00009001", MetodoPago = "Tarjeta de crédito", Estado = "Completado" },
+                new Pago { Id = 9002, MatriculaId = 9002, Monto = 180000m, FechaPago = new DateTime(2026, 7, 1), NumeroTransaccion = "TXN-00009002", MetodoPago = "Tarjeta de crédito", Estado = "Completado" },
+                new Pago { Id = 9003, MatriculaId = 9003, Monto = 135000m, FechaPago = new DateTime(2026, 7, 1), NumeroTransaccion = "TXN-00009003", MetodoPago = "Tarjeta de crédito", Estado = "Completado" }
+            );
+
+            // Registros de asistencia (HU14) del estudiante de demostración en sus
+            // cursos activos, usados para calcular el "Progreso del cuatrimestre"
+            // (porcentaje de asistencia por materia) en el Dashboard Estudiante.
+            // Mismo motivo que arriba: Id altos (9001+) para no chocar con
+            // asistencias reales ya guardadas por un docente desde el Panel Docente.
+            modelBuilder.Entity<Asistencia>().HasData(
+                // SC-301 Estructuras de Datos (Lun/Mié) - 3 de 4 presentes (75%)
+                new Asistencia { Id = 9001, CursoId = 1, EstudianteId = 1, Fecha = new DateTime(2026, 8, 3), Presente = true },
+                new Asistencia { Id = 9002, CursoId = 1, EstudianteId = 1, Fecha = new DateTime(2026, 8, 5), Presente = true },
+                new Asistencia { Id = 9003, CursoId = 1, EstudianteId = 1, Fecha = new DateTime(2026, 8, 10), Presente = true },
+                new Asistencia { Id = 9004, CursoId = 1, EstudianteId = 1, Fecha = new DateTime(2026, 8, 12), Presente = false },
+
+                // SC-220 Bases de Datos II (Mar/Jue) - 4 de 5 presentes (80%)
+                new Asistencia { Id = 9005, CursoId = 2, EstudianteId = 1, Fecha = new DateTime(2026, 8, 4), Presente = true },
+                new Asistencia { Id = 9006, CursoId = 2, EstudianteId = 1, Fecha = new DateTime(2026, 8, 6), Presente = true },
+                new Asistencia { Id = 9007, CursoId = 2, EstudianteId = 1, Fecha = new DateTime(2026, 8, 11), Presente = true },
+                new Asistencia { Id = 9008, CursoId = 2, EstudianteId = 1, Fecha = new DateTime(2026, 8, 13), Presente = true },
+                new Asistencia { Id = 9009, CursoId = 2, EstudianteId = 1, Fecha = new DateTime(2026, 8, 18), Presente = false },
+
+                // SC-410 Inteligencia Artificial (Sáb) - 1 de 2 presentes (50%)
+                new Asistencia { Id = 9010, CursoId = 30, EstudianteId = 1, Fecha = new DateTime(2026, 8, 8), Presente = true },
+                new Asistencia { Id = 9011, CursoId = 30, EstudianteId = 1, Fecha = new DateTime(2026, 8, 15), Presente = false },
+
+                // SC-360 Seguridad Informática (Sáb) - 3 de 3 presentes (100%)
+                new Asistencia { Id = 9012, CursoId = 49, EstudianteId = 1, Fecha = new DateTime(2026, 8, 1), Presente = true },
+                new Asistencia { Id = 9013, CursoId = 49, EstudianteId = 1, Fecha = new DateTime(2026, 8, 8), Presente = true },
+                new Asistencia { Id = 9014, CursoId = 49, EstudianteId = 1, Fecha = new DateTime(2026, 8, 15), Presente = true }
             );
         }
 

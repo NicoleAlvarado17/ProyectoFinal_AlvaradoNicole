@@ -1,18 +1,19 @@
 @model SistemaMatriculaURA.Models.Docente
 @{
     ViewData["Title"] = "Dashboard Docente";
+    var sesionesHoy = (List<ProyectoFinal_AlvaradoNicole.Controllers.SesionHoyViewModel>)ViewBag.SesionesHoy;
 }
 
 <div class="container mt-4">
 
-    <div class="ura-box p-4 mb-4">
+    <div class="ura-box ura-box-wide p-4 mb-4">
         <h1 class="mb-1">Bienvenido, @Model.Nombre</h1>
-        <p class="text-muted mb-0">Panel de Docente</p>
+        <p class="text-muted mb-0">Panel de Docente &bull; Cuatrimestre II-2026</p>
     </div>
 
     <div class="row g-3">
         <div class="col-md-4">
-            @await Component.InvokeAsync("StatCard", new { label = "Cursos asignados", value = ViewBag.Cursos.ToString() })
+            @await Component.InvokeAsync("StatCard", new { label = "Cursos asignados", value = ViewBag.Cursos.ToString(), subtitle = "este cuatrimestre" })
         </div>
 
         <div class="col-md-4">
@@ -20,11 +21,35 @@
         </div>
 
         <div class="col-md-4">
-            @await Component.InvokeAsync("StatCard", new { label = "Cuatrimestre actual", value = "II-2026" })
+            @await Component.InvokeAsync("StatCard", new { label = "Sesiones de hoy", value = sesionesHoy.Count.ToString(), subtitle = "próximas clases" })
         </div>
     </div>
 
-    <div class="ura-box p-4 mt-4">
+    <div class="ura-box ura-box-wide p-4 mt-4">
+        <h4 class="mb-3">Horarios del día &mdash; @ViewBag.NombreDiaHoy</h4>
+
+        @if (!sesionesHoy.Any())
+        {
+            <p class="text-muted mb-0">No tienes clases programadas para hoy.</p>
+        }
+        else
+        {
+            @foreach (var sesion in sesionesHoy)
+            {
+                <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                    <div class="fw-bold" style="min-width: 130px;">@sesion.Hora</div>
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">@sesion.Materia</div>
+                        <div class="text-muted" style="font-size: 0.85rem;">
+                            Grupo @sesion.Grupo &bull; @sesion.Aula
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <div class="ura-box ura-box-wide p-4 mt-4">
         <h4 class="mb-3">Mis cursos</h4>
 
         <a class="btn btn-primary" asp-action="CargaAcademica">Ver Carga Académica</a>

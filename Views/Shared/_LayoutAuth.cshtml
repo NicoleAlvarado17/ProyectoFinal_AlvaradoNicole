@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sistema de Matrícula • Universidad Real Americana</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<body style="background-color:#F8F9FA;">
+
+    <header class="ura-header">
+        <div class="container d-flex align-items-center py-3">
+            <img src="~/img/logo-ura.png" style="height:70px;" class="me-3" />
+            <h2 class="text-white fw-bold mb-0">Universidad Real Americana</h2>
+        </div>
+    </header>
+
+    <div class="ura-auth-wrapper">
+        <div class="ura-box">
+            @RenderBody()
+        </div>
+    </div>
+
+    <footer class="ura-footer text-center mt-5 py-3">
+        <div class="container">
+            &copy; 2026 - Sistema de Matrícula • Universidad Real Americana
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

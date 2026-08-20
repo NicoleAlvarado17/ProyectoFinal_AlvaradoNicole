@@ -18,6 +18,11 @@ namespace SistemaMatriculaURA.Models
         public string Sede { get; set; } = "";
         public string Horario { get; set; } = "";
 
+        // Grupo y aula de la sesión (ej. "A", "Aula 204"), usados en la sección
+        // "Horarios del día" del Panel Docente.
+        public string Grupo { get; set; } = "";
+        public string Aula { get; set; } = "";
+
         // HU19 - Estado del curso: Activo, Inactivo o Cerrado.
         public string Estado { get; set; } = "Activo";
 
