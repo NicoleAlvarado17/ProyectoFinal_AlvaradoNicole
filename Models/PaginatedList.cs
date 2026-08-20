@@ -2,8 +2,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SistemaMatriculaURA.Models
 {
-    // Utilidad genérica de paginación reutilizada por los listados largos
-    // (catálogo de cursos, gestión de cursos, gestión de carreras, etc.).
     public class PaginatedList<T> : List<T>
     {
         public int PageIndex { get; private set; }
