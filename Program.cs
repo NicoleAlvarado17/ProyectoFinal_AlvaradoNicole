@@ -96,12 +96,18 @@ using (var scope = app.Services.CreateScope())
                 Carrera = "N/A"
             };
 
-            var result = await userManager.CreateAsync(adminUser, "Admin123");
+            await userManager.CreateAsync(adminUser, "Admin123");
+        }
 
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(adminUser, "Admin");
-            }
+        // Se asegura el rol Admin en cada arranque, tanto si la cuenta se
+        // acaba de crear como si ya existía sin el rol asignado (por ejemplo,
+        // si quedó creada de una ejecución anterior antes de este cambio, o
+        // si AddToRoleAsync no se llegó a aplicar). Así el login siempre
+        // reconoce a admin@ura.com como Admin sin depender de que la cuenta
+        // se haya creado "perfecta" la primera vez.
+        if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Admin"))
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
         }
 
         // Cuentas de demostración (los registros correspondientes en las tablas
