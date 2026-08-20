@@ -3,16 +3,12 @@ using Xunit;
 
 namespace ProyectoFinal_AlvaradoNicole.Tests
 {
-    // Pruebas de la utilidad de paginación usada en el catálogo de cursos,
-    // Gestión de Cursos y Gestión de Carreras.
     public class PaginatedListTests
     {
         [Fact]
         public void CalculaElTotalDePaginasRedondeandoHaciaArriba()
         {
             var items = new List<int> { 4, 5, 6 };
-
-            // 20 elementos en total, 3 por página -> 7 páginas (ceil(20/3))
             var pagina = new PaginatedList<int>(items, count: 20, pageIndex: 2, pageSize: 3);
 
             Assert.Equal(7, pagina.TotalPages);
@@ -33,7 +29,6 @@ namespace ProyectoFinal_AlvaradoNicole.Tests
         [Fact]
         public void LaUltimaPaginaNoTienePaginaSiguiente()
         {
-            // 10 elementos, 2 por página -> 5 páginas; en la página 5 no hay siguiente.
             var pagina = new PaginatedList<int>(new List<int> { 9, 10 }, count: 10, pageIndex: 5, pageSize: 2);
 
             Assert.True(pagina.HasPreviousPage);

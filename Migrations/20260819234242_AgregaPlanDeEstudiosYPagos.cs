@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -7,10 +7,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProyectoFinal_AlvaradoNicole.Migrations
 {
-    /// <inheritdoc />
     public partial class AgregaPlanDeEstudiosYPagos : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<decimal>(
@@ -132,8 +130,6 @@ namespace ProyectoFinal_AlvaradoNicole.Migrations
                 column: "NumeroTransaccion",
                 unique: true);
         }
-
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

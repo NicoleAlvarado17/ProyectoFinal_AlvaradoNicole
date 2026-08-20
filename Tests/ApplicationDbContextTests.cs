@@ -4,11 +4,6 @@ using Xunit;
 
 namespace ProyectoFinal_AlvaradoNicole.Tests
 {
-    // Pruebas de integración ligeras contra una base de datos en memoria: no
-    // reemplazan probar con SQL Server real, pero verifican que el modelo de
-    // datos (relaciones, claves foráneas, datos semilla) se construye
-    // correctamente y que las operaciones básicas de las historias de usuario
-    // (matricular un curso, registrar asistencia) funcionan de extremo a extremo.
     public class ApplicationDbContextTests
     {
         private static ApplicationDbContext CrearContexto(string nombreBd)
@@ -69,8 +64,6 @@ namespace ProyectoFinal_AlvaradoNicole.Tests
         {
             using var context = CrearContexto(nameof(SePuedeRegistrarAsistenciaDeUnCursoPresencial));
             await context.Database.EnsureCreatedAsync();
-
-            // Curso Id=1 y Estudiante Id=1 vienen de los datos semilla (HU14).
             context.Asistencias.Add(new Asistencia
             {
                 CursoId = 1,

@@ -1,13 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace ProyectoFinal_AlvaradoNicole.Migrations
 {
-    /// <inheritdoc />
     public partial class AddDocenteIdToCursos : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
@@ -53,8 +51,6 @@ namespace ProyectoFinal_AlvaradoNicole.Migrations
                 principalTable: "Docentes",
                 principalColumn: "Id");
         }
-
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
