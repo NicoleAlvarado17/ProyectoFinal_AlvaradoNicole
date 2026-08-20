@@ -21,10 +21,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         {
             _context = context;
         }
-
-        // Listado con paginación y filtros (créditos, modalidad/tipo, texto libre y
-        // "solo sin profesor asignado") para poder ubicar rápido los cursos que
-        // necesitan que se les asigne un docente, horario o modalidad.
         public async Task<IActionResult> Index(int page = 1, int? creditos = null, string? modalidad = null, string? busqueda = null, bool soloSinAsignar = false)
         {
             ViewBag.Modalidades = Modalidades;
@@ -147,11 +143,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
-        // Acción rápida desde Gestión de Cursos: congela el curso (deja de
-        // aparecer en el plan de estudios público y en el catálogo del
-        // estudiante, sin necesidad de eliminarlo) sin pasar por el formulario
-        // completo de Editar.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Congelar(int id)
@@ -166,8 +157,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
-        // Revierte un curso congelado (u otro estado) a Activo.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reactivar(int id)

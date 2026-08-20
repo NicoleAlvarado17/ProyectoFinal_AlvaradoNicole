@@ -14,15 +14,11 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
         {
             _context = context;
         }
-
-        // LISTA DE DOCENTES
         public async Task<IActionResult> Index()
         {
             var docentes = await _context.Docentes.ToListAsync();
             return View(docentes);
         }
-
-        // DETALLES
         public async Task<IActionResult> Details(int id)
         {
             var docente = await _context.Docentes.FirstOrDefaultAsync(d => d.Id == id);
@@ -32,8 +28,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             return View(docente);
         }
-
-        // CREAR
         public IActionResult Create()
         {
             return View();
@@ -53,8 +47,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             return View(docente);
         }
-
-        // EDITAR
         public async Task<IActionResult> Edit(int id)
         {
             var docente = await _context.Docentes.FindAsync(id);
@@ -81,8 +73,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             return View(docente);
         }
-
-        // ELIMINAR
         public async Task<IActionResult> Delete(int id)
         {
             var docente = await _context.Docentes.FirstOrDefaultAsync(d => d.Id == id);

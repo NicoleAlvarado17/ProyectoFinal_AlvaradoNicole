@@ -20,28 +20,16 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             _context = context;
             _userManager = userManager;
         }
-
-        // Página principal (muestra las carreras reales para que "Ver más" lleve
-        // al plan de estudios real de cada una, en vez de un enlace genérico).
-        // Sin paginación aquí a propósito: la paginación de cursos vive en el
-        // plan de estudios de cada carrera (CarrerasController.PlanEstudios).
         public async Task<IActionResult> Index()
         {
             var carreras = await _context.Carreras.OrderBy(c => c.Nombre).ToListAsync();
             return View(carreras);
         }
-
-        // Dashboard Estudiante (HU07/HU10/HU11 - datos reales del estudiante autenticado)
         [Authorize(Roles = "Estudiante")]
         public async Task<IActionResult> Dashboard()
         {
             var userId = _userManager.GetUserId(User);
             var email = User.Identity?.Name;
-
-            // El nombre para mostrar debe ser el nombre real de la persona, no su
-            // correo (User.Identity.Name es el UserName de Identity, que aquí es
-            // el correo). Se toma de ApplicationUser.FullName, con el registro de
-            // Estudiante como respaldo si por alguna razón difiere.
             var appUser = await _userManager.GetUserAsync(User);
 
             var estudiante = await _context.Estudiantes
@@ -50,7 +38,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             if (estudiante == null)
             {
-                // Aún no tiene registro en Estudiantes (se crea al visitar el catálogo de cursos).
                 return View(new EstudianteDashboardViewModel
                 {
                     NombreEstudiante = appUser?.FullName ?? email ?? "Estudiante",
@@ -62,9 +49,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
                 .Include(m => m.Curso)
                 .Where(m => m.EstudianteId == estudiante.Id && m.Estado == "Activa")
                 .ToListAsync();
-
-            // HU11 - Cursos ya finalizados (con nota), usados para el promedio
-            // ponderado y el progreso de la carrera.
             var matriculasFinalizadas = await _context.Matriculas
                 .Include(m => m.Curso)
                 .Where(m => m.EstudianteId == estudiante.Id && m.Nota != null)
@@ -88,8 +72,6 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
             double progresoCarrera = creditosCarreraTotales > 0
                 ? Math.Round(creditosAprobados * 100.0 / creditosCarreraTotales, 0)
                 : 0;
-
-            // HU10 - Progreso del cuatrimestre: % de asistencia registrada por curso activo.
             var cursoIdsActivos = matriculasActivas.Select(m => m.CursoId).ToList();
             var asistenciasActivas = await _context.Asistencias
                 .Where(a => a.EstudianteId == estudiante.Id && cursoIdsActivos.Contains(a.CursoId))
@@ -130,23 +112,15 @@ namespace ProyectoFinal_AlvaradoNicole.Controllers
 
             return View(vm);
         }
-
-        // Dashboard Docente: la vista real vive en PanelDocenteController (busca al
-        // docente por correo). Se conserva esta ruta como redirección de respaldo
-        // porque Login.cshtml.cs y Register.cshtml.cs pueden apuntar aquí.
         [Authorize(Roles = "Docente")]
         public IActionResult DashboardDocente()
         {
             return RedirectToAction("DashboardDocente", "PanelDocente");
        }
-
-        // Página de privacidad
         public IActionResult Privacy()
         {
             return View();
         }
-
-        // Manejo de errores
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
